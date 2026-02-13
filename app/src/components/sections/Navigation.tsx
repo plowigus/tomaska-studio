@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { X } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -10,7 +10,6 @@ export function Navigation() {
     const [menuOpen, setMenuOpen] = useState(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
-    const navRef = useRef<HTMLElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
     const line1Ref = useRef<HTMLDivElement>(null);
     const line2Ref = useRef<HTMLDivElement>(null);
@@ -18,11 +17,19 @@ export function Navigation() {
 
     const tl = useRef<gsap.core.Timeline | null>(null);
 
-    // contextSafe gwarantuje czyszczenie animacji eventowych
     const { contextSafe } = useGSAP({ scope: containerRef });
 
+    // Blokada scrolla
+    useEffect(() => {
+        if (menuOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => { document.body.style.overflow = ""; };
+    }, [menuOpen]);
+
     useGSAP(() => {
-        // Inicjalizacja osi czasu (paused: true)
         tl.current = gsap.timeline({ paused: true })
             .to(overlayRef.current, {
                 y: "0%",
@@ -35,51 +42,46 @@ export function Navigation() {
                 duration: 0.6,
                 stagger: 0.1,
                 ease: "power2.out"
-            }, "-=0.4");
-
-        // Intro Navbaru
-        gsap.from(navRef.current, {
-            y: -20,
-            opacity: 0,
-            duration: 0.8,
-            delay: 0.2,
-            ease: "power2.out"
-        });
+            }, "-=0.2");
     });
 
     const toggleMenu = contextSafe(() => {
         if (!menuOpen) {
             tl.current?.play();
-            gsap.to(line1Ref.current, { rotate: 45, y: 6, duration: 0.3 });
-            gsap.to(line2Ref.current, { rotate: -45, y: -6, width: 48, duration: 0.3 });
+            // Hamburger -> X (biały)
+            gsap.to(line1Ref.current, { rotate: 45, y: 6, duration: 0.3, backgroundColor: "#ffffff" });
+            gsap.to(line2Ref.current, { rotate: -45, y: -6, width: 48, duration: 0.3, backgroundColor: "#ffffff" });
         } else {
             tl.current?.reverse();
-            gsap.to(line1Ref.current, { rotate: 0, y: 0, duration: 0.3 });
-            gsap.to(line2Ref.current, { rotate: 0, y: 0, width: 32, duration: 0.3 });
+            // X -> Hamburger (oryginalny kolor)
+            gsap.to(line1Ref.current, { rotate: 0, y: 0, duration: 0.3, backgroundColor: "currentColor" });
+            gsap.to(line2Ref.current, { rotate: 0, y: 0, width: 32, duration: 0.3, backgroundColor: "currentColor" });
         }
         setMenuOpen(!menuOpen);
     });
 
     const menuItems = [
         { number: '01', label: 'O MNIE', href: '#o-mnie' },
-        { number: '02', label: 'GALERIA PROJEKTÓW', href: '#galeria' },
+        { number: '02', label: 'PROJEKTY', href: '#galeria' },
         { number: '03', label: 'KONTAKT', href: '#kontakt' },
     ];
 
     return (
         <div ref={containerRef}>
-            {/* Zmiana na fixed top-0 w-full zdejmuje element z dokumentu zapobiegając łamaniu 100vh */}
+            {/* NAVBAR */}
             <nav
-                ref={navRef}
-                className="fixed top-0 left-0 w-full px-8 md:px-16 lg:px-24 py-10 flex justify-between items-center z-60 mix-blend-difference text-white"
+                className={`absolute top-0 left-0 w-full px-8 md:px-16 lg:px-24 py-12 flex justify-between items-end z-60 transition-colors duration-300 ${menuOpen ? 'text-white' : 'text-[#333]'}`}
             >
-                <Link href="/" className="text-xl tracking-tight">
+                <Link
+                    href="/"
+                    className={`text-xl tracking-tight font-sans font-bold transition-opacity duration-300 ${menuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                >
                     TOMASKA STUDIO
                 </Link>
 
                 <button
                     onClick={toggleMenu}
-                    className="flex flex-col gap-2 items-end cursor-pointer group z-50 relative"
+                    className="flex flex-col gap-2 items-end cursor-pointer group p-2"
                     aria-label="Toggle menu"
                 >
                     <div ref={line1Ref} className="w-12 h-[2px] bg-current transition-colors" />
@@ -87,14 +89,16 @@ export function Navigation() {
                 </button>
             </nav>
 
-            {/* Usunięto ukrycie 'hidden', overlay bazuje tylko na transformacji - y-full chowa go pod ekranem */}
+            {/* OVERLAY MENU */}
             <div
                 ref={overlayRef}
-                className="fixed inset-0 z-50 bg-primary text-secondary flex flex-col justify-center translate-y-full" // Added justify-center to vertically align menu items since top bar is gone
+                className="fixed inset-0 z-50 bg-black text-white flex flex-col translate-y-full"
             >
-                {/* Removed close button section */}
-
-                <div className="flex-1 flex items-center justify-end px-8 md:px-16 lg:px-24">
+                {/* ZMIANA: items-center -> items-end 
+                   Dzięki temu kontener z linkami zostanie wypchnięty na sam dół (flex-col + flex-1 na rodzicu + items-end w flex-row kontenerze).
+                   justify-end trzyma je po prawej stronie.
+                */}
+                <div className="flex-1 flex items-end justify-end px-8 md:px-16 lg:px-24 pb-20">
                     <div className="w-full">
                         {menuItems.map((item) => (
                             <div key={item.label} className="menu-item border-t border-white/20 last:border-b">
@@ -106,7 +110,7 @@ export function Navigation() {
                                     <span className="text-sm md:text-base opacity-50 group-hover:opacity-100 transition-opacity font-sans">
                                         {item.number}
                                     </span>
-                                    <span className="text-5xl md:text-7xl lg:text-8xl font-light tracking-tight group-hover:translate-x-4 transition-transform duration-500 font-serif">
+                                    <span className="text-4xl md:text-7xl lg:text-8xl font-light tracking-tight group-hover:translate-x-4 transition-transform duration-500 font-serif">
                                         {item.label}
                                     </span>
                                 </Link>

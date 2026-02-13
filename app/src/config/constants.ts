@@ -24,3 +24,30 @@ export const HERO_PROJECTS = [
             "https://images.unsplash.com/photo-1704040686446-428673c1c887?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb250ZW1wb3JhcnklMjBkaW5pbmclMjByb29tJTIwYXJjaGl0ZWN0dXJlfGVufDF8fHx8MTc3MDkxNDAxNnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
     },
 ];
+
+export const SELECTED_WORKS = [
+    {
+        id: 1,
+        title: 'Elegancja marmuru',
+        category: '01',
+        image: 'https://images.unsplash.com/photo-1671713572991-d285d94b6df4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjdXJ2ZWQlMjBjb25jcmV0ZSUyMHRlcnJhY2UlMjBvdXRkb29yJTIwbWluaW1hbGlzdHxlbnwxfHx8fDE3NzA5MDU5NTd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    },
+    {
+        id: 2,
+        title: 'Mocniejszy akcent',
+        category: '02',
+        image: 'https://images.unsplash.com/photo-1758448756207-54505680d130?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwY29uY3JldGUlMjBwb29sJTIwb3V0ZG9vciUyMGFyY2hpdGVjdHVyZXxlbnwxfHx8fDE3NzA5MDU5NTV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    },
+    {
+        id: 3,
+        title: 'Nowoczesna klasyka',
+        category: '03',
+        image: 'https://images.unsplash.com/photo-1718244200930-3ce5b5b40607?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx6ZW4lMjBnYXJkZW4lMjBtaW5pbWFsJTIwc3RvbmUlMjB3YXRlcnxlbnwxfHx8fDE3NzA5MDU5NjB8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    },
+    {
+        id: 4,
+        title: 'Projekty Publiczne',
+        category: '04',
+        image: 'https://images.unsplash.com/photo-1767360963892-3353defd6584?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBiYXRocm9vbSUyMGRhcmslMjBtaW5pbWFsfGVufDF8fHx8MTc3MDkwNTk2MXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    },
+] as const;

@@ -21,6 +21,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://tomaska-studio.com"),
   title: {
     template: "%s | Joanna Tomaska",
     default: "Joanna Tomaska - Interior Design Studio",
@@ -32,14 +33,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "pl_PL",
-    url: "https://tomaska-studio.com",
+    url: "/",
     siteName: "TOMASKA STUDIO",
     title: "Joanna Tomaska - Interior Design Studio",
     description:
       "Creating spaces that reflect personality and individual needs. Explore the portfolio of Joanna Tomaska.",
     images: [
       {
-        url: "/og-image.jpg", // Assumed default OG image
+        url: "/og-image.jpg", // Relative path, resolved via metadataBase
         width: 1200,
         height: 630,
         alt: "TOMASKA STUDIO Interior Design",
@@ -51,10 +52,21 @@ export const metadata: Metadata = {
     title: "Joanna Tomaska - Interior Design Studio",
     description: "Premium interior design studio creating personalized spaces.",
     creator: "@tomaskastudio", // Example handle
+    images: ["/og-image.jpg"], // Reusing general OG image
+  },
+  alternates: {
+    canonical: "/",
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
