@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google"; // Using Inter as clean sans-serif
 import { Navigation } from "@/app/src/components/sections/Navigation";
 import "./globals.css";
+import TargetCursor from "./src/components/ui/TargetCursor";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -78,6 +79,7 @@ export default function RootLayout({
   return (
     <html lang="pl" className={`${cormorant.variable} ${inter.variable}`}>
       <body className="bg-alabaster text-foreground antialiased selection:bg-gray-200 selection:text-black">
+        <TargetCursor />
         <Navigation />
         <main className="flex min-h-screen flex-col">{children}</main>
       </body>

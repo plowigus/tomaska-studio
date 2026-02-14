@@ -17,7 +17,7 @@ export function SelectedWorks() {
     const gridRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
-        // ... (Logika animacji bez zmian) ...
+        // Animacja nagłówka i linii
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: containerRef.current,
@@ -39,6 +39,7 @@ export function SelectedWorks() {
                 ease: "power2.out",
             }, "-=0.6");
 
+        // Animacja siatki projektów
         gsap.from(gridRef.current?.children || [], {
             y: 80,
             opacity: 0,
@@ -62,7 +63,7 @@ export function SelectedWorks() {
             <div className="mb-24">
                 <div ref={headerRef} className="opacity-100">
                     <h2 className="text-[clamp(2rem,8vw,6rem)] tracking-tight font-bold uppercase font-serif leading-none">
-                        PROJEKTY
+                        Projekty
                     </h2>
                 </div>
 
@@ -74,19 +75,19 @@ export function SelectedWorks() {
 
             <div
                 ref={gridRef}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-4 max-w-[1600px] mx-auto"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-12 max-w-[1600px] mx-auto"
             >
                 {SELECTED_WORKS.map((project) => (
-                    <div key={project.id} className="group cursor-pointer flex flex-col">
-                        {/* ZMIANA: Zmniejszono margines dolny z mb-3 na mb-1. 
-               Teraz kategoria jest bliżej tytułu.
-            */}
+                    <div key={project.id} className="cursor-target group cursor-pointer flex flex-col">
                         <div className="text-xs tracking-[0.2em] font-sans opacity-50 mb-1 uppercase">
                             {project.category}
                         </div>
 
                         <div className="flex items-center justify-between mb-4 border-b border-transparent group-hover:border-charcoal/20 transition-colors pb-2">
-                            <h3 className="text-xl font-serif tracking-tight">{project.title}</h3>
+                            {/* ZMIANA: Dodano font-bold do tytułu */}
+                            <h3 className="text-xl font-serif tracking-tight font-bold">
+                                {project.title}
+                            </h3>
                             <ArrowUpRight className="w-5 h-5 opacity-50 group-hover:opacity-100 group-hover:rotate-45 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300 ease-out" />
                         </div>
 

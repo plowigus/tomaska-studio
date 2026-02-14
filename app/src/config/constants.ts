@@ -49,5 +49,29 @@ export const SELECTED_WORKS = [
         title: 'Projekty Publiczne',
         category: '04',
         image: 'https://images.unsplash.com/photo-1767360963892-3353defd6584?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBiYXRocm9vbSUyMGRhcmslMjBtaW5pbWFsfGVufDF8fHx8MTc3MDkwNTk2MXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    },]
+
+
+
+export const OFFER_STEPS = [
+    {
+        id: "01",
+        title: "Inwentaryzacja",
+        description: "Spotkanie, pomiary i zdjęcia. Analizujemy Twoje potrzeby, styl życia i budżet, aby ustalić idealny zakres projektu.",
+    },
+    {
+        id: "02",
+        title: "Układ Funkcjonalny",
+        description: "Rzuty 2D i modele 3D (biel). Tworzymy optymalny plan przestrzeni, zanim przejdziemy do detali wizualnych.",
+    },
+    {
+        id: "03",
+        title: "Koncepcja Plastyczna",
+        description: "Wybór materiałów, kolorów i mebli. Realistyczne wizualizacje pomogą Ci zobaczyć finalny efekt przed rozpoczęciem prac.",
+    },
+    {
+        id: "04",
+        title: "Projekt Techniczny",
+        description: "Kompletna dokumentacja dla wykonawców: elektryka, hydraulika, detale meblowe oraz kosztorys materiałowy.",
     },
 ] as const;

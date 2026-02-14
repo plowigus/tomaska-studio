@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { X } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import Link from "next/link";
@@ -11,21 +10,12 @@ export function Navigation() {
 
     const containerRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
-    const line1Ref = useRef<HTMLDivElement>(null);
-    const line2Ref = useRef<HTMLDivElement>(null);
-    const closeBtnRef = useRef<HTMLButtonElement>(null);
-
     const tl = useRef<gsap.core.Timeline | null>(null);
 
     const { contextSafe } = useGSAP({ scope: containerRef });
 
-    // Blokada scrolla
     useEffect(() => {
-        if (menuOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-        }
+        document.body.style.overflow = menuOpen ? "hidden" : "";
         return () => { document.body.style.overflow = ""; };
     }, [menuOpen]);
 
@@ -37,80 +27,84 @@ export function Navigation() {
                 ease: "power3.inOut",
             })
             .from(".menu-item", {
-                x: 100,
+                x: 80,
                 opacity: 0,
                 duration: 0.6,
-                stagger: 0.1,
+                stagger: (i) => i * 0.1 + (i >= 2 ? 0.2 : 0),
                 ease: "power2.out"
             }, "-=0.2");
     });
 
-    const toggleMenu = contextSafe(() => {
-        if (!menuOpen) {
-            tl.current?.play();
-            // Hamburger -> X (biały)
-            gsap.to(line1Ref.current, { rotate: 45, y: 6, duration: 0.3, backgroundColor: "#ffffff" });
-            gsap.to(line2Ref.current, { rotate: -45, y: -6, width: 48, duration: 0.3, backgroundColor: "#ffffff" });
-        } else {
-            tl.current?.reverse();
-            // X -> Hamburger (oryginalny kolor)
-            gsap.to(line1Ref.current, { rotate: 0, y: 0, duration: 0.3, backgroundColor: "currentColor" });
-            gsap.to(line2Ref.current, { rotate: 0, y: 0, width: 32, duration: 0.3, backgroundColor: "currentColor" });
-        }
-        setMenuOpen(!menuOpen);
+    const openMenu = contextSafe(() => {
+        setMenuOpen(true);
+        tl.current?.play();
+    });
+
+    const closeMenu = contextSafe(() => {
+        setMenuOpen(false);
+        tl.current?.reverse();
     });
 
     const menuItems = [
         { number: '01', label: 'O MNIE', href: '#o-mnie' },
         { number: '02', label: 'PROJEKTY', href: '#galeria' },
-        { number: '03', label: 'KONTAKT', href: '#kontakt' },
+        { number: '03', label: 'WSPÓŁPRACA', href: '#oferta' },
+        { number: '04', label: 'KONTAKT', href: '#kontakt' },
     ];
 
     return (
         <div ref={containerRef}>
-            {/* NAVBAR */}
-            <nav
-                className={`absolute top-0 left-0 w-full px-8 md:px-16 lg:px-24 py-12 flex justify-between items-end z-60 transition-colors duration-300 ${menuOpen ? 'text-white' : 'text-[#333]'}`}
-            >
+            {/* NAVBAR BAZOWY (z-40) */}
+            <nav className="absolute top-0 left-0 w-full px-8 md:px-16 lg:px-24 py-12 flex justify-between items-end z-40">
                 <Link
                     href="/"
-                    className={`text-xl tracking-tight font-sans font-bold transition-opacity duration-300 ${menuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                    className="cursor-pointer cursor-target text-xl tracking-tight font-sans font-bold text-[#333]"
                 >
                     TOMASKA STUDIO
                 </Link>
 
                 <button
-                    onClick={toggleMenu}
-                    className="flex flex-col gap-2 items-end cursor-pointer group p-2"
-                    aria-label="Toggle menu"
+                    onClick={openMenu}
+                    className="cursor-pointer cursor-target group flex flex-col gap-2 items-end p-2"
                 >
-                    <div ref={line1Ref} className="w-12 h-[2px] bg-current transition-colors" />
-                    <div ref={line2Ref} className="w-8 h-[2px] bg-current transition-colors group-hover:w-12" />
+                    <div className="w-12 h-[2px] bg-black" />
+                    <div className="w-8 h-[2px] bg-black group-hover:w-12 transition-all duration-300" />
                 </button>
             </nav>
 
-            {/* OVERLAY MENU */}
+            {/* OVERLAY MENU (z-50) */}
             <div
                 ref={overlayRef}
                 className="fixed inset-0 z-50 bg-black text-white flex flex-col translate-y-full"
             >
-                {/* ZMIANA: items-center -> items-end 
-                   Dzięki temu kontener z linkami zostanie wypchnięty na sam dół (flex-col + flex-1 na rodzicu + items-end w flex-row kontenerze).
-                   justify-end trzyma je po prawej stronie.
-                */}
+                {/* PRZYCISK ZAMKNIĘCIA */}
+                <div className="absolute top-0 left-0 w-full px-8 md:px-16 lg:px-24 py-12 flex justify-end">
+                    <button
+                        onClick={closeMenu}
+                        className="cursor-pointer cursor-target group flex flex-col gap-2 items-end p-2"
+                        aria-label="Close menu"
+                    >
+                        <div className="w-12 h-[2px] bg-white rotate-45 translate-y-[5px]" />
+                        <div className="w-12 h-[2px] bg-white -rotate-45 -translate-y-[5px]" />
+                    </button>
+                </div>
+
                 <div className="flex-1 flex items-end justify-end px-8 md:px-16 lg:px-24 pb-20">
                     <div className="w-full">
                         {menuItems.map((item) => (
-                            <div key={item.label} className="menu-item border-t border-white/20 last:border-b">
+                            <div
+                                key={item.label}
+                                className="menu-item group border-b border-white/20 transition-colors duration-500 hover:border-b-white"
+                            >
                                 <Link
                                     href={item.href}
-                                    onClick={toggleMenu}
-                                    className="flex items-center justify-between py-4 md:py-6 group"
+                                    onClick={closeMenu}
+                                    className="cursor-pointer cursor-target flex items-center justify-between py-6 md:py-8"
                                 >
                                     <span className="text-sm md:text-base opacity-50 group-hover:opacity-100 transition-opacity font-sans">
                                         {item.number}
                                     </span>
-                                    <span className="text-4xl md:text-7xl lg:text-8xl font-light tracking-tight group-hover:translate-x-4 transition-transform duration-500 font-serif">
+                                    <span className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight group-hover:translate-x-4 transition-transform duration-500 font-serif">
                                         {item.label}
                                     </span>
                                 </Link>

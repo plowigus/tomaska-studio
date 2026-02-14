@@ -109,7 +109,7 @@ export function HeroSection() {
                 */}
                 <div
                     ref={textContainerRef}
-                    className="relative w-full max-w-screen-2xl mx-auto p-10 lg:p-16 rounded-2xl" // removed cursor-none
+                    className="no-custom-cursor relative w-full max-w-screen-2xl mx-auto p-10 lg:p-16 rounded-2xl" // removed cursor-none
                 >
                     {/* Layer 1: Base (Dark) - NOW INTERACTIVE */}
                     <TitleText
