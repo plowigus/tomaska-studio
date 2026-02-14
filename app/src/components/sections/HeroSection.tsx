@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -13,7 +13,9 @@ export function HeroSection() {
     const containerRef = useRef<HTMLElement>(null);
     const textContainerRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
-    const sliderRef = useRef<HTMLDivElement>(null);
+
+    // Stan dla kontenera slidera (potrzebny do przekazania do kursora)
+    const [sliderContainer, setSliderContainer] = useState<HTMLDivElement | null>(null);
 
     const { contextSafe } = useGSAP({ scope: containerRef });
 
@@ -23,25 +25,53 @@ export function HeroSection() {
     );
 
     const allProjects = [...HERO_PROJECTS, ...HERO_PROJECTS];
-
     const xTo = useRef<((value: number) => void) | null>(null);
     const yTo = useRef<((value: number) => void) | null>(null);
 
+    // ---------------------------------------------------------
+    // HOOK 1: Animacje Tekstu i Spotlight (BEZ ZALEŻNOŚCI)
+    // ---------------------------------------------------------
     useGSAP(() => {
-        gsap.from(textContainerRef.current, { y: 30, opacity: 0, duration: 1, delay: 0.5, ease: "power2.out" });
-        gsap.from(sliderRef.current, { y: 40, opacity: 0, duration: 1, delay: 0.8, ease: "power2.out" });
+        // 1. Animacja wejścia tekstu
+        gsap.from(textContainerRef.current, {
+            y: 30,
+            opacity: 0,
+            duration: 1,
+            delay: 0.5,
+            ease: "power2.out"
+        });
 
+        // 2. Setup Spotlighta (GSAP QuickTo)
         if (overlayRef.current) {
             gsap.set(overlayRef.current, { "--x": 0, "--y": 0, "--radius": 0 });
             xTo.current = gsap.quickTo(overlayRef.current, "--x", { duration: 0.1, ease: "power3.out" });
             yTo.current = gsap.quickTo(overlayRef.current, "--y", { duration: 0.1, ease: "power3.out" });
         }
-    }, { scope: containerRef });
+    }, { scope: containerRef }); // Pusta tablica zależności (domyślnie) - uruchamia się raz
 
+    // ---------------------------------------------------------
+    // HOOK 2: Animacja wejścia Slidera (ZALEŻNA OD STANU)
+    // ---------------------------------------------------------
+    useGSAP(() => {
+        if (sliderContainer) {
+            gsap.from(sliderContainer, {
+                y: 40,
+                opacity: 0,
+                duration: 1,
+                delay: 0.8,
+                ease: "power2.out"
+            });
+        }
+    }, {
+        scope: containerRef,
+        dependencies: [sliderContainer] // Uruchamia się tylko gdy sliderContainer się zmieni
+    });
+
+    // Obsługa myszki dla Spotlight
     const handleMouseMove = contextSafe((e: React.MouseEvent<HTMLDivElement>) => {
         if (!textContainerRef.current || !xTo.current || !yTo.current) return;
         const rect = textContainerRef.current.getBoundingClientRect();
-        const OFFSET = 80;
+        const OFFSET = 80; // offset dla -inset-20
         xTo.current(e.clientX - rect.left + OFFSET);
         yTo.current(e.clientY - rect.top + OFFSET);
     });
@@ -65,13 +95,19 @@ export function HeroSection() {
     return (
         <section ref={containerRef} className="relative w-full bg-alabaster h-dvh flex flex-col overflow-hidden pt-32">
             <div className="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 items-center gap-4">
-                <div ref={textContainerRef} className="no-custom-cursor relative w-full max-w-screen-2xl mx-auto p-10 lg:p-16 rounded-2xl">
+                <div
+                    ref={textContainerRef}
+                    className="relative w-full max-w-screen-2xl mx-auto p-10 lg:p-16 rounded-2xl"
+                >
+                    {/* Warstwa bazowa (Ciemny tekst) - tutaj jest wykrywanie myszki */}
                     <TitleText
                         className="relative z-0 text-charcoal cursor-none"
                         onMouseMove={handleMouseMove}
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
                     />
+
+                    {/* Warstwa Spotlight (Biały tekst na czarnym tle) */}
                     <div
                         ref={overlayRef}
                         className="absolute -inset-20 flex items-center justify-center pointer-events-none z-10 text-white bg-black"
@@ -87,30 +123,26 @@ export function HeroSection() {
                 </div>
             </div>
 
-            {/* Carousel Section */}
-            <div
-                ref={sliderRef}
-                // ZMIANA: cursor-grab zamienione na cursor-none, dodano relative
-                className="relative w-screen overflow-hidden cursor-pointer"
-            >
-                {/* Komponent Kursora musi być wewnątrz lub obok, referencja jest przekazana */}
-                <CarouselCursor containerRef={sliderRef} />
+            {/* KURSOR KARUZELI - Przekazujemy stan kontenera */}
+            <CarouselCursor container={sliderContainer} />
 
+            {/* KONTENER SLIDERA - Używamy ref callbacka (setSliderContainer) */}
+            <div
+                ref={setSliderContainer}
+                className="relative w-screen overflow-hidden cursor-none"
+            >
                 <div ref={emblaRef} className="overflow-hidden w-full">
                     <div className="flex">
                         {allProjects.map((project, index) => (
-                            <div
-                                key={`${project.location}-${index}`}
-                                className="flex-[0_0_80%] md:flex-[0_0_40%] lg:flex-[0_0_33.333%] min-w-0 pl-1"
-                            >
+                            <div key={`${project.location}-${index}`} className="flex-[0_0_80%] md:flex-[0_0_40%] lg:flex-[0_0_33.333%] min-w-0 pl-1">
                                 <div className="relative group/image">
                                     <div className="relative h-[300px] overflow-hidden bg-gray-200">
                                         <Image
                                             src={project.image}
-                                            alt={`Projekt wnętrza w: ${project.location}`}
+                                            alt={project.location}
                                             fill
                                             sizes="(max-width: 768px) 100vw, 33vw"
-                                            className="object-cover group-hover/image:scale-105 transition-transform duration-700 pointer-events-none select-none"
+                                            className="object-cover pointer-events-none select-none group-hover/image:scale-105 transition-transform duration-700"
                                             priority={index < 3}
                                         />
                                     </div>
