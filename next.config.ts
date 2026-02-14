@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        protocol: "http",
+        hostname: "tomaskastudio.pl",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
