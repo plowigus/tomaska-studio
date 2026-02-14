@@ -14,7 +14,6 @@ export function HeroSection() {
     const textContainerRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
 
-    // Stan dla kontenera slidera (potrzebny do przekazania do kursora)
     const [sliderContainer, setSliderContainer] = useState<HTMLDivElement | null>(null);
 
     const { contextSafe } = useGSAP({ scope: containerRef });
@@ -28,11 +27,7 @@ export function HeroSection() {
     const xTo = useRef<((value: number) => void) | null>(null);
     const yTo = useRef<((value: number) => void) | null>(null);
 
-    // ---------------------------------------------------------
-    // HOOK 1: Animacje Tekstu i Spotlight (BEZ ZALEŻNOŚCI)
-    // ---------------------------------------------------------
     useGSAP(() => {
-        // 1. Animacja wejścia tekstu
         gsap.from(textContainerRef.current, {
             y: 30,
             opacity: 0,
@@ -41,17 +36,14 @@ export function HeroSection() {
             ease: "power2.out"
         });
 
-        // 2. Setup Spotlighta (GSAP QuickTo)
         if (overlayRef.current) {
             gsap.set(overlayRef.current, { "--x": 0, "--y": 0, "--radius": 0 });
             xTo.current = gsap.quickTo(overlayRef.current, "--x", { duration: 0.1, ease: "power3.out" });
             yTo.current = gsap.quickTo(overlayRef.current, "--y", { duration: 0.1, ease: "power3.out" });
         }
-    }, { scope: containerRef }); // Pusta tablica zależności (domyślnie) - uruchamia się raz
+    }, { scope: containerRef });
 
-    // ---------------------------------------------------------
-    // HOOK 2: Animacja wejścia Slidera (ZALEŻNA OD STANU)
-    // ---------------------------------------------------------
+
     useGSAP(() => {
         if (sliderContainer) {
             gsap.from(sliderContainer, {
@@ -64,14 +56,14 @@ export function HeroSection() {
         }
     }, {
         scope: containerRef,
-        dependencies: [sliderContainer] // Uruchamia się tylko gdy sliderContainer się zmieni
+        dependencies: [sliderContainer]
     });
 
-    // Obsługa myszki dla Spotlight
+
     const handleMouseMove = contextSafe((e: React.MouseEvent<HTMLDivElement>) => {
         if (!textContainerRef.current || !xTo.current || !yTo.current) return;
         const rect = textContainerRef.current.getBoundingClientRect();
-        const OFFSET = 80; // offset dla -inset-20
+        const OFFSET = 80;
         xTo.current(e.clientX - rect.left + OFFSET);
         yTo.current(e.clientY - rect.top + OFFSET);
     });
@@ -99,15 +91,12 @@ export function HeroSection() {
                     ref={textContainerRef}
                     className="relative w-full max-w-screen-2xl mx-auto p-10 lg:p-16 rounded-2xl"
                 >
-                    {/* Warstwa bazowa (Ciemny tekst) - tutaj jest wykrywanie myszki */}
                     <TitleText
                         className="relative z-0 text-charcoal cursor-none"
                         onMouseMove={handleMouseMove}
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
                     />
-
-                    {/* Warstwa Spotlight (Biały tekst na czarnym tle) */}
                     <div
                         ref={overlayRef}
                         className="absolute -inset-20 flex items-center justify-center pointer-events-none z-10 text-white bg-black"
@@ -122,11 +111,7 @@ export function HeroSection() {
                     </div>
                 </div>
             </div>
-
-            {/* KURSOR KARUZELI - Przekazujemy stan kontenera */}
             <CarouselCursor container={sliderContainer} />
-
-            {/* KONTENER SLIDERA - Używamy ref callbacka (setSliderContainer) */}
             <div
                 ref={setSliderContainer}
                 className="relative w-screen overflow-hidden cursor-none"

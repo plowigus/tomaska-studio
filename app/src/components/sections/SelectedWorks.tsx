@@ -17,7 +17,6 @@ export function SelectedWorks() {
     const gridRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
-        // Animacja nagłówka i linii
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: containerRef.current,
@@ -39,7 +38,6 @@ export function SelectedWorks() {
                 ease: "power2.out",
             }, "-=0.6");
 
-        // Animacja siatki projektów
         gsap.from(gridRef.current?.children || [], {
             y: 80,
             opacity: 0,
@@ -84,7 +82,6 @@ export function SelectedWorks() {
                         </div>
 
                         <div className="flex items-center justify-between mb-4 border-b border-transparent group-hover:border-charcoal/20 transition-colors pb-2">
-                            {/* ZMIANA: Dodano font-bold do tytułu */}
                             <h3 className="text-xl font-serif tracking-tight font-bold">
                                 {project.title}
                             </h3>

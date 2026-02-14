@@ -15,7 +15,6 @@ export function AboutSection() {
     const imagesGridRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
-        // ... (Logika animacji bez zmian) ...
         const textElements = textContainerRef.current?.children;
         const tl = gsap.timeline({
             scrollTrigger: {
@@ -69,11 +68,9 @@ export function AboutSection() {
         <section
             ref={containerRef}
             id="o-mnie"
-            // ZMIANA: Zredukowane paddingi pionowe (py-12 na mobile, md:py-24 na desktop)
             className="px-8 md:px-16 lg:px-24 py-12 md:py-24 bg-alabaster overflow-hidden"
         >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 max-w-[1600px] mx-auto items-start">
-                {/* ... (Reszta struktury bez zmian) ... */}
                 <div className="flex flex-col justify-start">
                     <div className="mb-12">
                         <div ref={textContainerRef}>

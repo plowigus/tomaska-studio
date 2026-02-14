@@ -20,7 +20,6 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
 
     useEffect(() => {
         setMounted(true);
-        // Bezpieczniejsza detekcja - tylko małe ekrany dotykowe
         setIsMobile(window.matchMedia("(max-width: 768px) and (pointer: coarse)").matches);
 
         if (hideDefaultCursor && !isMobile) {
@@ -35,7 +34,6 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
         const cursor = cursorRef.current;
         const corners = cursor.querySelectorAll('.target-cursor-corner');
 
-        // Ustawienie początkowe
         gsap.set(cursor, { xPercent: -50, yPercent: -50, opacity: 1 });
 
         const moveHandler = (e: MouseEvent) => {
@@ -51,7 +49,6 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
             const target = (e.target as HTMLElement).closest(targetSelector);
             if (target) {
                 const rect = target.getBoundingClientRect();
-                // Animacja "przytulenia" do krawędzi
                 gsap.to(corners, {
                     scale: 1.2,
                     duration: 0.3,
@@ -76,7 +73,6 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
     return (
         <div
             ref={cursorRef}
-            // ZMIANA: z-[99999] i mix-blend-difference dla widoczności
             className="fixed top-0 left-0 w-0 h-0 pointer-events-none z-99999 mix-blend-difference opacity-100"
             style={{ willChange: 'transform' }}
         >

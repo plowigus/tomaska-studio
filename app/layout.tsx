@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google"; // Using Inter as clean sans-serif
+import { Cormorant_Garamond, Inter } from "next/font/google";
 import { Navigation } from "@/app/src/components/sections/Navigation";
 import "./globals.css";
-// import TargetCursor from "./src/components/ui/TargetCursor";
+
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
       "Creating spaces that reflect personality and individual needs. Explore the portfolio of Joanna Tomaska.",
     images: [
       {
-        url: "/og-image.jpg", // Relative path, resolved via metadataBase
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "TOMASKA STUDIO Interior Design",
@@ -52,8 +52,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Joanna Tomaska - Interior Design Studio",
     description: "Premium interior design studio creating personalized spaces.",
-    creator: "@tomaskastudio", // Example handle
-    images: ["/og-image.jpg"], // Reusing general OG image
+    creator: "@tomaskastudio",
+    images: ["/og-image.jpg"],
   },
   alternates: {
     canonical: "/",
@@ -79,7 +79,7 @@ export default function RootLayout({
   return (
     <html lang="pl" className={`${cormorant.variable} ${inter.variable}`}>
       <body className="bg-alabaster text-foreground antialiased selection:bg-gray-200 selection:text-black">
-        {/* <TargetCursor /> */}
+
         <Navigation />
         <main className="flex min-h-screen flex-col">{children}</main>
       </body>
