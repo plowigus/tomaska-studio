@@ -1,12 +1,13 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SELECTED_WORKS } from "@/app/src/config/constants";
+import { ProjectModal } from "@/app/src/components/ui/ProjectModal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,6 +16,21 @@ export function SelectedWorks() {
     const headerRef = useRef<HTMLDivElement>(null);
     const lineRef = useRef<HTMLHRElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
+    const [selectedProject, setSelectedProject] = useState<typeof SELECTED_WORKS[number] | null>(null);
+
+    const handleNextProject = () => {
+        if (!selectedProject) return;
+        const currentIndex = SELECTED_WORKS.findIndex(p => p.id === selectedProject.id);
+        const nextIndex = (currentIndex + 1) % SELECTED_WORKS.length;
+        setSelectedProject(SELECTED_WORKS[nextIndex]);
+    };
+
+    const handlePrevProject = () => {
+        if (!selectedProject) return;
+        const currentIndex = SELECTED_WORKS.findIndex(p => p.id === selectedProject.id);
+        const prevIndex = (currentIndex - 1 + SELECTED_WORKS.length) % SELECTED_WORKS.length;
+        setSelectedProject(SELECTED_WORKS[prevIndex]);
+    };
 
     useGSAP(() => {
         const tl = gsap.timeline({
@@ -76,7 +92,11 @@ export function SelectedWorks() {
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-12 max-w-[1600px] mx-auto"
             >
                 {SELECTED_WORKS.map((project) => (
-                    <div key={project.id} className="cursor-target group cursor-pointer flex flex-col">
+                    <div
+                        key={project.id}
+                        onClick={() => setSelectedProject(project)}
+                        className="cursor-target group cursor-pointer flex flex-col"
+                    >
                         <div className="text-xs tracking-[0.2em] font-sans opacity-50 mb-1 uppercase">
                             {project.category}
                         </div>
@@ -102,6 +122,16 @@ export function SelectedWorks() {
                     </div>
                 ))}
             </div>
+
+            {selectedProject && (
+                <ProjectModal
+                    isOpen={!!selectedProject}
+                    onClose={() => setSelectedProject(null)}
+                    project={selectedProject}
+                    onNext={handleNextProject}
+                    onPrev={handlePrevProject}
+                />
+            )}
         </section>
     );
 }

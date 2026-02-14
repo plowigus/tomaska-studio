@@ -59,7 +59,7 @@ export function CarouselCursor({
             ref={cursorRef}
             className="fixed top-0 left-0 w-24 h-24  border-black border-2 rounded-full pointer-events-none z-100 flex items-center justify-center bg-white/40 backdrop-blur-sm opacity-0 scale-0"
         >
-            <span className="text-[12px] font-mono uppercase tracking-widest text-black font-bold">
+            <span className="text-[14px] text-center font-mono uppercase tracking-widest text-black font-bold">
                 drag me
             </span>
         </div>

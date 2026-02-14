@@ -30,26 +30,62 @@ export const SELECTED_WORKS = [
         id: 1,
         title: 'Elegancja marmuru',
         category: '01',
+        description: 'Projekt wnętrza apartamentu w centrum Warszawy, gdzie główną rolę gra szlachetny marmur Calacatta Oro. Przestrzeń została zaprojektowana z myślą o płynnym przenikaniu się stref funkcjonalnych, tworząc spójną, elegancką całość. Zastosowanie naturalnych materiałów – kamienia, drewna dębowego i lnu – nadaje wnętrzu ciepła, mimo jego luksusowego charakteru. Każdy detal, od frezowania frontów po dobór sztukaterii, był starannie przemyślany, aby podkreślić ponadczasowy styl.',
+        year: '2024',
         image: 'http://tomaskastudio.pl/wp-content/uploads/2020/04/n2.jpg',
+        gallery: [
+            'http://tomaskastudio.pl/wp-content/uploads/2020/05/Wn%C4%99trze-salon-scaled.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2020/04/2-1.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2020/04/8a.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2020/04/4.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2022/02/70fb63ad-5a2d-408c-87ae-7e6c00f090b4.jpg'
+        ]
     },
     {
         id: 2,
         title: 'Mocniejszy akcent',
         category: '02',
+        description: 'Odważna realizacja dla młodego inwestora, który nie bał się ciemnych barw i surowych faktur. Grafit, głęboki granat i czerń zostały przełamane ciepłym oświetleniem i miedzianymi dodatkami. Wnętrze ma charakter loftowy, ale z nutą elegancji. Otwarta przestrzeń dzienna łączy się z aneksem kuchennym, tworząc idealne miejsce do spotkań towarzyskich. Sypialnia, utrzymana w ciemnej tonacji, sprzyja wyciszeniu i regeneracji.',
+        year: '2023',
         image: 'http://tomaskastudio.pl/wp-content/uploads/2022/02/bd1cf092-14a9-4f67-9e1d-5da16b65b7c8.jpg',
+        gallery: [
+            'http://tomaskastudio.pl/wp-content/uploads/2022/02/4130333f-abf1-4255-9f6c-89b60624ef7c.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2022/02/c724fa57-df12-4135-9799-01117666bf5e.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2022/02/15e5f088-12c0-4a3f-86e1-5fb88314a4bd.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2022/02/3d16d835-b7da-41ff-aac5-b844cb2fd37d.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2022/02/6372ba35-b897-4009-a552-f55ee42dbb70.jpg'
+        ]
     },
     {
         id: 3,
         title: 'Nowoczesna klasyka',
         category: '03',
+        description: 'Harmonijne połączenie klasycznych form ze współczesnym designem. Projekt domu pod Krakowem, w którym liczył się spokój i równowaga. Jasna paleta barw – beże, biele i szarości – stanowi tło dla starannie dobranych mebli i dzieł sztuki. Sztukaterie na ścianach nawiązują do tradycji, podczas gdy nowoczesne oświetlenie i proste formy mebli nadają wnętrzu świeżości. To przestrzeń, która "oddycha" i daje poczucie luksusowego komfortu.',
+        year: '2023',
         image: 'http://tomaskastudio.pl/wp-content/uploads/2022/02/161ac075-fecf-4530-ac96-e9ab78fd5d70.jpg',
+        gallery: [
+            'http://tomaskastudio.pl/wp-content/uploads/2022/02/344a6e23-c3e7-4807-86f8-8c37d9105755.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2022/02/16899579-655e-420b-803f-9c0eb7cb6fc1.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2022/02/5881c6c0-903c-4971-8ffd-ef9e930b6aef.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2022/02/28ed9b50-706e-4bbe-b69f-f454561518af.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2022/02/61758a7d-2cac-4973-974c-9d940358449f.jpg'
+        ]
     },
     {
         id: 4,
         title: 'Projekty Publiczne',
         category: '04',
+        description: 'Rewitalizacja zabytkowej kamienicy na potrzeby butikowego hotelu. Wyzwanie polegało na zachowaniu historycznej tkanki budynku przy jednoczesnym wprowadzeniu nowoczesnych udogodnień. Lobby hotelowe zachwyca odrestaurowaną posadzką i oryginalnymi kolumnami, które zestawiono z miękkimi welurowymi sofami i nowoczesną recepcją. Każdy pokój ma indywidualny charakter, nawiązujący do historii miejsca, ale oferujący najwyższy standard wypoczynku.',
+        year: '2022',
         image: 'http://tomaskastudio.pl/wp-content/uploads/2020/02/14-1.jpg',
-    },]
+        gallery: [
+            'http://tomaskastudio.pl/wp-content/uploads/2020/02/15.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2020/02/13-a.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2020/02/11.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2020/02/7-ok.jpg',
+            'http://tomaskastudio.pl/wp-content/uploads/2022/02/39779e45-4413-44d5-aa2d-f9c56a99162a.jpg'
+        ]
+    },];
 
 
 
