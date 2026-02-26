@@ -26,34 +26,34 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://tomaska-studio.com"),
   title: {
-    template: "%s | Joanna Tomaska",
-    default: "Joanna Tomaska - Interior Design Studio",
+    template: "%s | Joanna Tomaska | Architekt Wnętrz",
+    default: "Joanna Tomaska | Architekt Wnętrz | Projektowanie Wnętrz",
   },
   description:
-    "Premium interior design studio by Joanna Tomaska. Creating spaces that reflect personality and individual needs with a focus on aesthetics and functionality.",
-  keywords: ["Interior Design", "Joanna Tomaska", "Architecture", "Luxury Interiors", "Design Studio"],
+    "Ekskluzywne projektowanie wnętrz przez Joannę Tomaską. Tworzymy przestrzenie odzwierciedlające Twoją osobowość. Profesjonalna architektura wnętrz, funkcjonalność i ponadczasowa estetyka.",
+  keywords: ["Projektant Wnętrz", "Architekt Wnętrz", "Projektowanie Wnętrz", "Joanna Tomaska", "Ekskluzywne Wnętrza", "Aranżacja Wnętrz"],
   authors: [{ name: "Joanna Tomaska" }],
   openGraph: {
     type: "website",
     locale: "pl_PL",
     url: "/",
     siteName: "TOMASKA STUDIO",
-    title: "Joanna Tomaska - Interior Design Studio",
+    title: "Joanna Tomaska | Architekt Wnętrz | Projektowanie Wnętrz",
     description:
-      "Creating spaces that reflect personality and individual needs. Explore the portfolio of Joanna Tomaska.",
+      "Ekskluzywne projektowanie wnętrz. Tworzymy przestrzenie odzwierciedlające Twoją osobowość. Poznaj portfolio Joanny Tomaskiej.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "TOMASKA STUDIO Interior Design",
+        alt: "TOMASKA STUDIO Projektowanie Wnętrz",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Joanna Tomaska - Interior Design Studio",
-    description: "Premium interior design studio creating personalized spaces.",
+    title: "Joanna Tomaska | Architekt Wnętrz | Projektowanie Wnętrz",
+    description: "Premium projektowanie wnętrz i architektura tworząca spersonalizowane przestrzenie.",
     creator: "@tomaskastudio",
     images: ["/og-image.jpg"],
   },

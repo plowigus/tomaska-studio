@@ -111,7 +111,7 @@ export function SelectedWorks() {
                         <div className="relative aspect-3/4 overflow-hidden bg-[#e5e5e5] border border-black/20">
                             <Image
                                 src={project.image}
-                                alt={project.title}
+                                alt={project.seoAlt || project.title}
                                 fill
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                                 className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"

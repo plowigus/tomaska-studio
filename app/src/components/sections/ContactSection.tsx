@@ -162,7 +162,7 @@ export function ContactSection() {
                     <div className="space-y-6">
                         <div>
                             <span className="text-xs tracking-widest uppercase text-black block mb-1">Projektant</span>
-                            <span className="text-xl tracking-wide font-light">JOANNA TOMASKA</span>
+                            <span className="text-xl tracking-wide font-light">Joanna Tomaska</span>
                         </div>
                         <div>
                             <span className="text-xs tracking-widest uppercase text-black block mb-1">Telefon</span>

@@ -205,7 +205,7 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
                                     <div key={index} className="flex-[0_0_100%] min-w-0 relative aspect-4/3">
                                         <Image
                                             src={img}
-                                            alt={`${project.title} ${index + 1}`}
+                                            alt={project.seoAlt ? `${project.seoAlt} - zdjęcie ${index + 1}` : `${project.title} - zdjęcie ${index + 1}`}
                                             fill
                                             className="object-contain"
                                             priority={index === 0}
@@ -303,7 +303,7 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
                     <div className="relative w-full flex-1 min-h-0 bg-[#0a0a0a] overflow-hidden">
                         <Image
                             src={activeImage}
-                            alt={project.title}
+                            alt={project.seoAlt || project.title}
                             fill
                             className="active-project-image object-contain"
                             priority
@@ -320,7 +320,7 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
                             >
                                 <Image
                                     src={project.image}
-                                    alt="Thumbnail main"
+                                    alt={project.seoAlt ? `${project.seoAlt} - miniatura głowna` : `${project.title} - miniatura główna`}
                                     fill
                                     className="object-cover"
                                 />
@@ -334,7 +334,7 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
                                 >
                                     <Image
                                         src={img}
-                                        alt={`Thumbnail ${index + 1}`}
+                                        alt={project.seoAlt ? `${project.seoAlt} - miniatura ${index + 1}` : `${project.title} - miniatura ${index + 1}`}
                                         fill
                                         className="object-cover"
                                     />

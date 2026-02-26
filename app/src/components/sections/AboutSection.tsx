@@ -98,7 +98,7 @@ export function AboutSection() {
                     <div className="relative w-full h-full overflow-hidden bg-gray-200 aspect-square lg:aspect-auto">
                         <Image
                             src="/05. Męski Azyl/Detal/DRP_174.jpg"
-                            alt="Architektoniczny detal schodów"
+                            alt="Architektoniczny detal schodów - Projektowanie Wnętrz Joanna Tomaska"
                             fill
                             sizes="(max-width: 768px) 50vw, 25vw"
                             className="object-cover hover:scale-105 transition-transform duration-700"
@@ -107,7 +107,7 @@ export function AboutSection() {
                     <div className="relative w-full h-full overflow-hidden bg-gray-200 aspect-square lg:aspect-auto lg:row-span-2">
                         <Image
                             src="/05. Męski Azyl/Detal/DRP_175.jpg"
-                            alt="Minimalistyczne wnętrze"
+                            alt="Minimalistyczna i funkcjonalna przestrzeń - Ekskluzywne Wnętrza Architekt"
                             fill
                             sizes="(max-width: 768px) 50vw, 25vw"
                             className="object-cover hover:scale-105 transition-transform duration-700"
@@ -116,7 +116,7 @@ export function AboutSection() {
                     <div className="relative w-full h-full overflow-hidden bg-gray-200 col-span-2 aspect-square min-h-[250px] lg:col-span-1 lg:aspect-auto lg:min-h-0">
                         <Image
                             src="/05. Męski Azyl/Detal/DRP_176.jpg"
-                            alt="Luksusowe wnętrze"
+                            alt="Luksusowe wnętrze dające poczucie komfortu - Aranżacja Wnętrz"
                             fill
                             sizes="(max-width: 768px) 100vw, 25vw"
                             className="object-cover hover:scale-105 transition-transform duration-700"

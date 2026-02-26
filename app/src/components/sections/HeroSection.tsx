@@ -55,13 +55,14 @@ export function HeroSection() {
                     ref={textContainerRef}
                     className="relative w-full max-w-screen-2xl mx-auto p-0 lg:p-16 rounded-2xl"
                 >
-                    <h1 className="text-3xl lg:text-5xl text-center leading-[1.2] tracking-tight font-serif max-w-6xl lg:max-w-3xl mx-auto text-charcoal">
+                    <h1 className="sr-only">Joanna Tomaska - Architekt Wnętrz, Ekskluzywne Projektowanie Wnętrz</h1>
+                    <h2 className="text-3xl lg:text-5xl text-center leading-[1.2] tracking-tight font-serif max-w-6xl lg:max-w-3xl mx-auto text-charcoal">
                         „Tworzę <em className="italic">przestrzeń</em> idealną dla klienta,{" "}
                         <br className="hidden lg:block" />
                         poznając jego <em className="italic">osobowość</em>{" "}
                         <br className="hidden lg:block" />
                         oraz indywidualne potrzeby."
-                    </h1>
+                    </h2>
                 </div>
             </div>
             <CarouselCursor container={sliderContainer} />
@@ -72,12 +73,12 @@ export function HeroSection() {
                 <div ref={emblaRef} className="overflow-hidden w-full">
                     <div className="flex">
                         {allProjects.map((project, index) => (
-                            <div key={`${project.location}-${index}`} className="flex-[0_0_80%] md:flex-[0_0_40%] lg:flex-[0_0_33.333%] min-w-0 pl-1">
+                            <div key={`${project.seoAlt}-${index}`} className="flex-[0_0_80%] md:flex-[0_0_40%] lg:flex-[0_0_33.333%] min-w-0 pl-1">
                                 <div className="relative group/image">
                                     <div className="relative h-[300px] overflow-hidden bg-gray-200">
                                         <Image
                                             src={project.image}
-                                            alt={project.location}
+                                            alt={project.seoAlt}
                                             fill
                                             sizes="(max-width: 768px) 100vw, 33vw"
                                             className="object-cover pointer-events-none select-none group-hover/image:scale-105 transition-transform duration-700"
