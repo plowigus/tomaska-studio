@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import { Navigation } from "@/app/src/components/sections/Navigation";
+import { LenisProvider } from "@/app/src/components/providers/LenisProvider";
 import "./globals.css";
 
 
@@ -19,6 +20,7 @@ const inter = Inter({
 
 export const viewport: Viewport = {
   themeColor: "#fcfbf9",
+  viewportFit: "cover",
 };
 
 export const metadata: Metadata = {
@@ -79,9 +81,10 @@ export default function RootLayout({
   return (
     <html lang="pl" className={`${cormorant.variable} ${inter.variable}`}>
       <body className="bg-alabaster text-foreground antialiased selection:bg-gray-200 selection:text-black">
-
-        <Navigation />
-        <main className="flex min-h-screen flex-col">{children}</main>
+        <LenisProvider>
+          <Navigation />
+          <main className="flex min-h-screen flex-col">{children}</main>
+        </LenisProvider>
       </body>
     </html>
   );

@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import { X, ArrowLeft, ArrowRight } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import useEmblaCarousel from "embla-carousel-react";
 import { SELECTED_WORKS } from "@/app/src/config/constants";
 
 type Project = typeof SELECTED_WORKS[number];
@@ -23,21 +24,54 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
     const contentRef = useRef<HTMLDivElement>(null);
     const [activeImage, setActiveImage] = useState(project.image);
     const [isAnimating, setIsAnimating] = useState(false);
+    const [mobileActiveSlide, setMobileActiveSlide] = useState(0);
 
-    // Reset active image when project changes
+    const allImages = [project.image, ...project.gallery];
+
+    // Mobile carousel (Embla)
+    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "center" });
+
+    const onSelect = useCallback(() => {
+        if (!emblaApi) return;
+        setMobileActiveSlide(emblaApi.selectedScrollSnap());
+    }, [emblaApi]);
+
+    useEffect(() => {
+        if (!emblaApi) return;
+        emblaApi.on("select", onSelect);
+        onSelect();
+        return () => { emblaApi.off("select", onSelect); };
+    }, [emblaApi, onSelect]);
+
+    // Reset when project changes
     useEffect(() => {
         setActiveImage(project.image);
-    }, [project]);
+        setMobileActiveSlide(0);
+        if (emblaApi) emblaApi.scrollTo(0, true);
+    }, [project, emblaApi]);
 
-    // Body scroll lock
+    // Body scroll lock + theme-color for notch
     useEffect(() => {
+        const setThemeColor = (color: string) => {
+            let meta = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement | null;
+            if (!meta) {
+                meta = document.createElement('meta');
+                meta.name = 'theme-color';
+                document.head.appendChild(meta);
+            }
+            meta.content = color;
+        };
+
         if (isOpen) {
             document.body.style.overflow = "hidden";
+            setThemeColor('#0a0a0a');
         } else {
             document.body.style.overflow = "";
+            setThemeColor('#fcfbf9');
         }
         return () => {
             document.body.style.overflow = "";
+            setThemeColor('#fcfbf9');
         };
     }, [isOpen]);
 
@@ -95,11 +129,10 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
 
     const [isHovered, setIsHovered] = useState(false);
 
-    // Autoplay logic
+    // Autoplay logic (desktop only)
     useEffect(() => {
         if (isHovered || isAnimating) return;
 
-        const allImages = [project.image, ...project.gallery];
         const interval = setInterval(() => {
             const currentIndex = allImages.indexOf(activeImage);
             const nextIndex = (currentIndex + 1) % allImages.length;
@@ -113,7 +146,6 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
         if (activeImage === newImage || isAnimating) return;
         setIsAnimating(true);
 
-        // Fast, smooth transition
         const tl = gsap.timeline({
             onComplete: () => setIsAnimating(false)
         });
@@ -151,19 +183,85 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
             {/* Modal Content */}
             <div
                 ref={contentRef}
-                className="relative w-full h-full md:h-[90vh] md:max-w-[1600px] bg-[#0a0a0a] md:rounded-2xl overflow-hidden flex flex-col md:flex-row text-[#ededed] opacity-0 shadow-2xl"
+                className="relative w-full h-dvh md:h-[90vh] md:max-w-[1600px] bg-[#0a0a0a] md:rounded-2xl overflow-hidden flex flex-col md:flex-row text-[#ededed] opacity-0 shadow-2xl"
+                style={{ paddingTop: 'env(safe-area-inset-top, 0px)', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
             >
                 {/* Close Button */}
                 <button
                     onClick={handleClose}
-                    className="absolute top-6 right-6 z-50 p-2 rounded-full bg-black text-white border border-white/10 hover:scale-110 transition-all duration-300 pointer-events-auto"
+                    className="absolute z-50 p-2 rounded-full bg-black text-white border border-white/10 hover:scale-110 transition-all duration-300 pointer-events-auto cursor-pointer"
+                    style={{ top: 'calc(env(safe-area-inset-top, 0px) + 1.5rem)', right: '1.5rem' }}
                 >
                     <X size={24} />
                 </button>
 
+                {/* ========== MOBILE LAYOUT ========== */}
+                <div className="md:hidden flex flex-col h-full overflow-hidden">
+                    {/* Image Carousel (top, biggest element) */}
+                    <div className="flex-none px-4 pt-4">
+                        <div ref={emblaRef} className="overflow-hidden">
+                            <div className="flex gap-4">
+                                {allImages.map((img, index) => (
+                                    <div key={index} className="flex-[0_0_100%] min-w-0 relative aspect-4/3">
+                                        <Image
+                                            src={img}
+                                            alt={`${project.title} ${index + 1}`}
+                                            fill
+                                            className="object-contain"
+                                            priority={index === 0}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        {/* Dot indicators */}
+                        <div className="flex items-center justify-center gap-2 py-3">
+                            {allImages.map((_, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => emblaApi?.scrollTo(index)}
+                                    className={`h-2 rounded-full transition-all duration-300 ${index === mobileActiveSlide ? 'bg-white w-6' : 'bg-white/30 w-2'
+                                        }`}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Scrollable text content */}
+                    <div className="flex-1 overflow-y-auto px-6 pb-4">
+                        <span className="text-xs font-mono text-white/50 tracking-widest uppercase block mb-3">
+                            {project.category} — {project.year}
+                        </span>
+                        <h2 className="text-2xl font-serif font-bold mb-4 leading-tight">
+                            {project.title}
+                        </h2>
+                        <div className="w-10 h-px bg-white/30 mb-4" />
+                        <p className="text-white/70 leading-relaxed text-sm font-sans">
+                            {project.description}
+                        </p>
+                    </div>
+
+                    {/* Mobile Navigation (Bottom) */}
+                    <div className="flex-none flex items-center justify-between px-6 py-4 border-t border-white/10">
+                        <button
+                            onClick={onPrev}
+                            className="flex items-center gap-2 text-xs font-mono tracking-widest p-3 active:scale-95 transition-transform"
+                        >
+                            <ArrowLeft size={14} /> POPRZEDNI
+                        </button>
+                        <button
+                            onClick={onNext}
+                            className="flex items-center gap-2 text-xs font-mono tracking-widest p-3 active:scale-95 transition-transform"
+                        >
+                            NASTĘPNY <ArrowRight size={14} />
+                        </button>
+                    </div>
+                </div>
+
+                {/* ========== DESKTOP LAYOUT ========== */}
                 {/* LEFT COLUMN: Info & Navigation */}
-                <div className="w-full md:w-[400px] lg:w-[480px] h-full flex flex-col border-b md:border-b-0 md:border-r border-white/10">
-                    <div className="flex-1 p-8 md:p-12 lg:p-16 overflow-hidden">
+                <div className="hidden md:flex w-full md:w-[400px] lg:w-[480px] md:h-full flex-col border-r border-white/10">
+                    <div className="flex-1 p-12 lg:p-16 overflow-hidden">
                         <span className="text-xs font-mono text-white/50 tracking-widest uppercase block mb-4">
                             {project.category} — {project.year}
                         </span>
@@ -176,28 +274,28 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
                         </p>
                     </div>
 
-                    <div className="flex-none px-8 md:px-12 lg:px-16 py-6 hidden md:flex items-center gap-4 border-t border-white/5">
+                    <div className="flex-none px-12 lg:px-16 py-6 flex items-center gap-4 border-t border-white/5">
                         <button
                             onClick={onPrev}
                             className="group flex items-center gap-3 text-sm font-mono tracking-wider hover:text-white/70 transition-colors"
                         >
                             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                            PREV
+                            POPRZEDNI
                         </button>
                         <div className="h-4 w-px bg-white/20 mx-2" />
                         <button
                             onClick={onNext}
                             className="group flex items-center gap-3 text-sm font-mono tracking-wider hover:text-white/70 transition-colors"
                         >
-                            NEXT
+                            NASTĘPNY
                             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                         </button>
                     </div>
                 </div>
 
-                {/* RIGHT COLUMN: Gallery */}
+                {/* RIGHT COLUMN: Gallery (desktop) */}
                 <div
-                    className="flex-1 flex flex-col h-full bg-[#050505] overflow-hidden"
+                    className="hidden md:flex flex-1 flex-col h-full bg-[#050505] overflow-hidden"
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                 >
@@ -207,14 +305,14 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
                             src={activeImage}
                             alt={project.title}
                             fill
-                            className="active-project-image object-cover"
+                            className="active-project-image object-contain"
                             priority
                         />
                     </div>
 
                     {/* Thumbnails */}
-                    <div className="p-4 md:p-6 bg-[#0a0a0a] border-t border-white/5">
-                        <div className="grid grid-cols-6 md:grid-cols-8 gap-2">
+                    <div className="p-6 bg-[#0a0a0a] border-t border-white/5">
+                        <div className="grid grid-cols-8 gap-2">
                             <button
                                 onClick={() => handleImageChange(project.image)}
                                 className={`relative aspect-square overflow-hidden rounded-sm transition-all duration-300 ${activeImage === project.image ? 'ring-2 ring-white opacity-100' : 'opacity-40 hover:opacity-100'
@@ -244,24 +342,9 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
                             ))}
                         </div>
                     </div>
-
-                    {/* Mobile Navigation (Bottom) */}
-                    <div className="md:hidden flex items-center justify-between p-6 border-t border-white/10 bg-[#0a0a0a]">
-                        <button
-                            onClick={onPrev}
-                            className="flex items-center gap-2 text-xs font-mono tracking-widest p-4 active:scale-95 transition-transform"
-                        >
-                            <ArrowLeft size={14} /> PREV PROJECT
-                        </button>
-                        <button
-                            onClick={onNext}
-                            className="flex items-center gap-2 text-xs font-mono tracking-widest p-4 active:scale-95 transition-transform"
-                        >
-                            NEXT PROJECT <ArrowRight size={14} />
-                        </button>
-                    </div>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
+

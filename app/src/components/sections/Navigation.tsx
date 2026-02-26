@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import Link from "next/link";
+import Lenis from "lenis";
 
 export function Navigation() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -37,11 +38,27 @@ export function Navigation() {
     const openMenu = contextSafe(() => { setMenuOpen(true); tl.current?.play(); });
     const closeMenu = contextSafe(() => { setMenuOpen(false); tl.current?.reverse(); });
 
+    const handleScrollTo = contextSafe((href: string) => {
+        closeMenu();
+        // Wait for menu close animation, then scroll
+        setTimeout(() => {
+            const target = document.querySelector(href);
+            if (target) {
+                const lenis = (window as unknown as Record<string, Lenis>).__lenis;
+                if (lenis) {
+                    lenis.scrollTo(target as HTMLElement, { offset: 0, duration: 1.2 });
+                } else {
+                    target.scrollIntoView({ behavior: "smooth" });
+                }
+            }
+        }, 700);
+    });
+
     const menuItems = [
-        { number: '01', label: 'O MNIE', href: '#o-mnie' },
-        { number: '02', label: 'PROJEKTY', href: '#galeria' },
-        { number: '03', label: 'WSPÓŁPRACA', href: '#oferta' },
-        { number: '04', label: 'KONTAKT', href: '#kontakt' },
+        { label: 'O MNIE', href: '#o-mnie' },
+        { label: 'PROJEKTY', href: '#galeria' },
+        { label: 'WSPÓŁPRACA', href: '#oferta' },
+        { label: 'KONTAKT', href: '#kontakt' },
     ];
 
     return (
@@ -56,22 +73,21 @@ export function Navigation() {
                 </button>
             </nav>
 
-            <div ref={overlayRef} className="fixed inset-0 z-50 bg-black text-white flex flex-col translate-y-full">
+            <div ref={overlayRef} className="fixed inset-0 z-50 bg-white text-black flex flex-col translate-y-full">
                 <div className="absolute top-0 left-0 w-full px-8 md:px-16 lg:px-24 py-12 flex justify-end">
                     <button onClick={closeMenu} className="cursor-pointer group flex flex-col gap-2 items-end p-2">
-                        <div className="w-12 h-[2px] bg-white rotate-45 translate-y-[5px]" />
-                        <div className="w-12 h-[2px] bg-white -rotate-45 -translate-y-[5px]" />
+                        <div className="w-12 h-[2px] bg-black rotate-45 translate-y-[5px]" />
+                        <div className="w-12 h-[2px] bg-black -rotate-45 -translate-y-[5px]" />
                     </button>
                 </div>
 
                 <div className="flex-1 flex items-end justify-end px-8 md:px-16 lg:px-24 pb-20">
                     <div className="w-full">
                         {menuItems.map((item) => (
-                            <div key={item.label} className="menu-item group border-b border-white/20 transition-colors duration-500 hover:border-b-white">
-                                <Link href={item.href} onClick={closeMenu} className="cursor-pointer flex items-center justify-between py-6 md:py-8">
-                                    <span className="text-sm md:text-base opacity-50 group-hover:opacity-100 transition-opacity font-sans">{item.number}</span>
-                                    <span className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight group-hover:translate-x-4 transition-transform duration-500 font-serif">{item.label}</span>
-                                </Link>
+                            <div key={item.label} className="menu-item group border-b border-black/20 transition-colors duration-500 hover:border-b-black">
+                                <button onClick={() => handleScrollTo(item.href)} className="cursor-pointer w-full flex items-center justify-end py-6 md:py-8">
+                                    <span className="text-4xl md:text-5xl lg:text-5xl font-light tracking-tight group-hover:translate-x-4 transition-transform duration-500 font-serif">{item.label}</span>
+                                </button>
                             </div>
                         ))}
                     </div>

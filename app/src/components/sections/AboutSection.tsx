@@ -74,7 +74,7 @@ export function AboutSection() {
                 <div className="flex flex-col justify-start">
                     <div className="mb-12">
                         <div ref={textContainerRef}>
-                            <h2 className="text-[clamp(2rem,8vw,6rem)] tracking-tight font-bold uppercase font-serif leading-none">
+                            <h2 className="text-[clamp(2.5rem,5vw,3.5rem)] tracking-tight font-bold uppercase font-serif leading-none">
                                 O mnie
                             </h2>
                         </div>
@@ -94,31 +94,31 @@ export function AboutSection() {
                     </div>
                 </div>
 
-                <div ref={imagesGridRef} className="grid grid-cols-2 gap-4 auto-rows-[200px] md:auto-rows-[300px]">
-                    <div className="relative w-full h-full overflow-hidden bg-gray-200">
+                <div ref={imagesGridRef} className="grid grid-cols-2 gap-4 auto-rows-[160px] md:auto-rows-[300px]">
+                    <div className="relative w-full h-full overflow-hidden bg-gray-200 aspect-square lg:aspect-auto">
                         <Image
-                            src="https://images.unsplash.com/photo-1728032648596-b969c7810937?q=80&w=1080&auto=format&fit=crop"
+                            src="/05. Męski Azyl/Detal/DRP_174.jpg"
                             alt="Architektoniczny detal schodów"
                             fill
                             sizes="(max-width: 768px) 50vw, 25vw"
                             className="object-cover hover:scale-105 transition-transform duration-700"
                         />
                     </div>
-                    <div className="relative w-full h-full row-span-2 overflow-hidden bg-gray-200">
+                    <div className="relative w-full h-full overflow-hidden bg-gray-200 aspect-square lg:aspect-auto lg:row-span-2">
                         <Image
-                            src="https://images.unsplash.com/photo-1760623139051-1358f93b1722?q=80&w=1080&auto=format&fit=crop"
+                            src="/05. Męski Azyl/Detal/DRP_175.jpg"
                             alt="Minimalistyczne wnętrze"
                             fill
                             sizes="(max-width: 768px) 50vw, 25vw"
                             className="object-cover hover:scale-105 transition-transform duration-700"
                         />
                     </div>
-                    <div className="relative w-full h-full overflow-hidden bg-gray-200">
+                    <div className="relative w-full h-full overflow-hidden bg-gray-200 col-span-2 aspect-square min-h-[250px] lg:col-span-1 lg:aspect-auto lg:min-h-0">
                         <Image
-                            src="https://images.unsplash.com/photo-1762419757069-c0a1a31f943c?q=80&w=1080&auto=format&fit=crop"
+                            src="/05. Męski Azyl/Detal/DRP_176.jpg"
                             alt="Luksusowe wnętrze"
                             fill
-                            sizes="(max-width: 768px) 50vw, 25vw"
+                            sizes="(max-width: 768px) 100vw, 25vw"
                             className="object-cover hover:scale-105 transition-transform duration-700"
                         />
                     </div>

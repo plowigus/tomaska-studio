@@ -76,14 +76,14 @@ export function SelectedWorks() {
         >
             <div className="mb-24">
                 <div ref={headerRef} className="opacity-100">
-                    <h2 className="text-[clamp(2rem,8vw,6rem)] tracking-tight font-bold uppercase font-serif leading-none">
+                    <h2 className="text-[clamp(2.5rem,5vw,3.5rem)] tracking-tight font-bold uppercase font-serif leading-none">
                         Projekty
                     </h2>
                 </div>
 
                 <hr
                     ref={lineRef}
-                    className="mt-8 w-full h-px bg-[#333] border-0 origin-left"
+                    className="mt-8 w-full h-px bg-[#333]/30 border-0 origin-left"
                 />
             </div>
 
@@ -102,13 +102,13 @@ export function SelectedWorks() {
                         </div>
 
                         <div className="flex items-center justify-between mb-4 border-b border-transparent group-hover:border-charcoal/20 transition-colors pb-2">
-                            <h3 className="text-xl font-serif tracking-tight font-bold">
+                            <h3 className="text-2xl font-serif tracking-tight font-bold">
                                 {project.title}
                             </h3>
                             <ArrowUpRight className="w-5 h-5 opacity-50 group-hover:opacity-100 group-hover:rotate-45 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300 ease-out" />
                         </div>
 
-                        <div className="relative aspect-3/4 overflow-hidden bg-[#e5e5e5]">
+                        <div className="relative aspect-3/4 overflow-hidden bg-[#e5e5e5] border border-black/20">
                             <Image
                                 src={project.image}
                                 alt={project.title}

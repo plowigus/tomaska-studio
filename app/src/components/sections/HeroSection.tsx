@@ -12,11 +12,8 @@ import { CarouselCursor } from "@/app/src/components/ui/CarouselCursor";
 export function HeroSection() {
     const containerRef = useRef<HTMLElement>(null);
     const textContainerRef = useRef<HTMLDivElement>(null);
-    const overlayRef = useRef<HTMLDivElement>(null);
 
     const [sliderContainer, setSliderContainer] = useState<HTMLDivElement | null>(null);
-
-    const { contextSafe } = useGSAP({ scope: containerRef });
 
     const [emblaRef] = useEmblaCarousel(
         { loop: true, dragFree: true },
@@ -24,8 +21,6 @@ export function HeroSection() {
     );
 
     const allProjects = [...HERO_PROJECTS, ...HERO_PROJECTS];
-    const xTo = useRef<((value: number) => void) | null>(null);
-    const yTo = useRef<((value: number) => void) | null>(null);
 
     useGSAP(() => {
         gsap.from(textContainerRef.current, {
@@ -35,14 +30,7 @@ export function HeroSection() {
             delay: 0.5,
             ease: "power2.out"
         });
-
-        if (overlayRef.current) {
-            gsap.set(overlayRef.current, { "--x": 0, "--y": 0, "--radius": 0 });
-            xTo.current = gsap.quickTo(overlayRef.current, "--x", { duration: 0.1, ease: "power3.out" });
-            yTo.current = gsap.quickTo(overlayRef.current, "--y", { duration: 0.1, ease: "power3.out" });
-        }
     }, { scope: containerRef });
-
 
     useGSAP(() => {
         if (sliderContainer) {
@@ -59,56 +47,21 @@ export function HeroSection() {
         dependencies: [sliderContainer]
     });
 
-
-    const handleMouseMove = contextSafe((e: React.MouseEvent<HTMLDivElement>) => {
-        if (!textContainerRef.current || !xTo.current || !yTo.current) return;
-        const rect = textContainerRef.current.getBoundingClientRect();
-        const OFFSET = 80;
-        xTo.current(e.clientX - rect.left + OFFSET);
-        yTo.current(e.clientY - rect.top + OFFSET);
-    });
-
-    const handleMouseEnter = contextSafe(() => {
-        if (overlayRef.current) gsap.to(overlayRef.current, { "--radius": 140, duration: 0.3, ease: "power2.out" });
-    });
-
-    const handleMouseLeave = contextSafe(() => {
-        if (overlayRef.current) gsap.to(overlayRef.current, { "--radius": 0, duration: 0.3, ease: "power2.in" });
-    });
-
-    const TitleText = ({ className = "", ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-        <h1 className={`text-5xl lg:text-5xl text-center leading-[1.2] tracking-tight font-serif max-w-3xl mx-auto ${className}`} {...props}>
-            „Tworzę <em className="italic">przestrzeń</em> idealną dla klienta, <br />
-            poznając jego <em className="italic">osobowość</em><br />
-            oraz indywidualne potrzeby."
-        </h1>
-    );
-
     return (
         <section ref={containerRef} className="relative w-full bg-alabaster h-dvh flex flex-col overflow-hidden pt-32">
+            <div className="absolute top-0 left-0 right-0 bg-alabaster z-50" style={{ height: 'env(safe-area-inset-top, 0px)' }} />
             <div className="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 items-center gap-4">
                 <div
                     ref={textContainerRef}
-                    className="relative w-full max-w-screen-2xl mx-auto p-10 lg:p-16 rounded-2xl"
+                    className="relative w-full max-w-screen-2xl mx-auto p-0 lg:p-16 rounded-2xl"
                 >
-                    <TitleText
-                        className="relative z-0 text-charcoal cursor-none"
-                        onMouseMove={handleMouseMove}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                    />
-                    <div
-                        ref={overlayRef}
-                        className="absolute -inset-20 flex items-center justify-center pointer-events-none z-10 text-white bg-black"
-                        style={{
-                            clipPath: "circle(calc(var(--radius) * 1px) at calc(var(--x) * 1px) calc(var(--y) * 1px))",
-                            WebkitClipPath: "circle(calc(var(--radius) * 1px) at calc(var(--x) * 1px) calc(var(--y) * 1px))",
-                        }}
-                    >
-                        <div className="flex items-center justify-center text-center">
-                            <TitleText />
-                        </div>
-                    </div>
+                    <h1 className="text-3xl lg:text-5xl text-center leading-[1.2] tracking-tight font-serif max-w-6xl lg:max-w-3xl mx-auto text-charcoal">
+                        „Tworzę <em className="italic">przestrzeń</em> idealną dla klienta,{" "}
+                        <br className="hidden lg:block" />
+                        poznając jego <em className="italic">osobowość</em>{" "}
+                        <br className="hidden lg:block" />
+                        oraz indywidualne potrzeby."
+                    </h1>
                 </div>
             </div>
             <CarouselCursor container={sliderContainer} />

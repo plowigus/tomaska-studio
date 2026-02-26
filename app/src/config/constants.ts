@@ -2,26 +2,22 @@ export const HERO_PROJECTS = [
     {
         location: "Warszawa",
         date: "'24",
-        image:
-            "https://images.unsplash.com/photo-1705321963943-de94bb3f0dd3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwaW50ZXJpb3IlMjBkZXNpZ24lMjBsaXZpbmclMjByb29tfGVufDF8fHx8MTc3MDkwOTAyM3ww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        image: "/05. Męski Azyl/DRP_42.jpg",
     },
     {
         location: "Kraków",
         date: "'24",
-        image:
-            "https://images.unsplash.com/photo-1765862835319-18fb6f8caff6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBiZWRyb29tJTIwZGVzaWduJTIwbmV1dHJhbHxlbnwxfHx8fDE3NzA5MTQwMTV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        image: "/06. Spokojna przestrzeń/DRP_65.jpg",
     },
     {
         location: "Gdańsk",
         date: "'23",
-        image:
-            "https://images.unsplash.com/photo-1643034738686-d69e7bc047e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBraXRjaGVuJTIwaW50ZXJpb3IlMjBtYXJibGV8ZW58MXx8fHwxNzcwODk0NjE2fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        image: "/07. Przytulne wnętrze/20240620_211601.jpg",
     },
     {
         location: "Poznań",
         date: "'23",
-        image:
-            "https://images.unsplash.com/photo-1704040686446-428673c1c887?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb250ZW1wb3JhcnklMjBkaW5pbmclMjByb29tJTIwYXJjaGl0ZWN0dXJlfGVufDF8fHx8MTc3MDkxNDAxNnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        image: "/08. Nowoczesna forma/1_4.jpg",
     },
 ];
 
@@ -85,29 +81,91 @@ export const SELECTED_WORKS = [
             'http://tomaskastudio.pl/wp-content/uploads/2020/02/7-ok.jpg',
             'http://tomaskastudio.pl/wp-content/uploads/2022/02/39779e45-4413-44d5-aa2d-f9c56a99162a.jpg'
         ]
-    },];
+    },
+    {
+        id: 5,
+        title: 'Męski Azyl',
+        category: '05',
+        description: 'Projekt wnętrza, w którym dominują ciemne odcienie drewna, surowy beton i starannie dobrane oświetlenie. Przestrzeń zaprojektowana z myślą o komforcie i funkcjonalności, idealnie oddająca charakter właściciela. Każdy element – od faktur po dobór materiałów – buduje atmosferę spokoju i męskiej elegancji.',
+        year: '2024',
+        image: '/05. Męski Azyl/DRP.jpg',
+        gallery: [
+            '/05. Męski Azyl/DRP_2.jpg',
+            '/05. Męski Azyl/DRP_15.jpg',
+            '/05. Męski Azyl/DRP_23.jpg',
+            '/05. Męski Azyl/DRP_27.jpg',
+            '/05. Męski Azyl/DRP_36.jpg',
+        ]
+    },
+    {
+        id: 6,
+        title: 'Spokojna Przestrzeń',
+        category: '06',
+        description: 'Wnętrze utrzymane w stonowanej, jasnej palecie barw. Naturalne materiały i minimalistyczne formy tworzą przestrzeń sprzyjającą wyciszeniu i regeneracji. Projekt łączy funkcjonalność z estetyką, oferując harmonijne otoczenie do codziennego życia.',
+        year: '2024',
+        image: '/06. Spokojna przestrzeń/DRP_7.jpg',
+        gallery: [
+            '/06. Spokojna przestrzeń/DRP_32.jpg',
+            '/06. Spokojna przestrzeń/DRP_36.jpg',
+            '/06. Spokojna przestrzeń/DRP_38.jpg',
+            '/06. Spokojna przestrzeń/DRP_42.jpg',
+            '/06. Spokojna przestrzeń/DRP_58.jpg',
+        ]
+    },
+    {
+        id: 7,
+        title: 'Przytulne Wnętrze',
+        category: '07',
+        description: 'Ciepłe, domowe wnętrze, w którym każdy detal służy budowaniu przytulnej atmosfery. Miękkie tkaniny, naturalne drewno i starannie dobrane oświetlenie tworzą przestrzeń, w której chce się spędzać czas. Projekt odzwierciedla indywidualny charakter mieszkańców.',
+        year: '2023',
+        image: '/07. Przytulne wnętrze/20240620_190101.jpg',
+        gallery: [
+            '/07. Przytulne wnętrze/20240620_210734.jpg',
+            '/07. Przytulne wnętrze/20240620_211601.jpg',
+            '/07. Przytulne wnętrze/20240620_212234.jpg',
+            '/07. Przytulne wnętrze/20240620_212243.jpg',
+            '/07. Przytulne wnętrze/20240620_212257.jpg',
+        ]
+    },
+    {
+        id: 8,
+        title: 'Nowoczesna Forma',
+        category: '08',
+        description: 'Projekt łączący nowoczesne formy architektoniczne z funkcjonalnym podejściem do przestrzeni. Czyste linie, geometryczne akcenty i przemyślana kompozycja materiałów tworzą wnętrze o silnym, współczesnym charakterze. Każde pomieszczenie to spójna wizja estetyczna.',
+        year: '2023',
+        image: '/08. Nowoczesna forma/1_3.jpg',
+        gallery: [
+            '/08. Nowoczesna forma/1_4.jpg',
+            '/08. Nowoczesna forma/1_9a.jpg',
+            '/08. Nowoczesna forma/1_10a.jpg',
+            '/08. Nowoczesna forma/1_15.jpg',
+            '/08. Nowoczesna forma/Przedsionek 1_10b.jpg',
+            '/08. Nowoczesna forma/Tv wall_1b.jpg',
+        ]
+    },
+];
 
 
 
 export const OFFER_STEPS = [
     {
         id: "01",
-        title: "Inwentaryzacja",
-        description: "Spotkanie, pomiary i zdjęcia. Analizujemy Twoje potrzeby, styl życia i budżet, aby ustalić idealny zakres projektu.",
+        title: "Przygotowanie do procesu",
+        description: "Spotkanie – szczegółowe omówienie inspiracji oraz potrzeb funkcjonalnych i estetycznych. Pomiar – jeśli klient nie posiada rzutu.",
     },
     {
         id: "02",
         title: "Układ Funkcjonalny",
-        description: "Rzuty 2D i modele 3D (biel). Tworzymy optymalny plan przestrzeni, zanim przejdziemy do detali wizualnych.",
+        description: "Możliwe opcje układów z wymiarowaniem na rzucie. Czarno-białe widoki 3D. Rozwiązania materiałowe w formie inspiracji. Korekty oraz wybór jednej wersji układu.",
     },
     {
         id: "03",
-        title: "Koncepcja Plastyczna",
-        description: "Wybór materiałów, kolorów i mebli. Realistyczne wizualizacje pomogą Ci zobaczyć finalny efekt przed rozpoczęciem prac.",
+        title: "Koncepcja Projektowa",
+        description: "Wizualizacje pokazujące kolorystykę i rozwiązania materiałowe we wnętrzu. Korekty oraz akceptacja rozwiązań.",
     },
     {
         id: "04",
-        title: "Projekt Techniczny",
-        description: "Kompletna dokumentacja dla wykonawców: elektryka, hydraulika, detale meblowe oraz kosztorys materiałowy.",
+        title: "Dobór Materiałów i Rysunki Techniczne",
+        description: "Spotkanie w sklepach branżowych w celu wyboru materiałów wykończeniowych i wyposażenia. Projekt wodno-kanalizacyjny, elektryki, mebli na wymiar, rysunki zaprojektowanych ścian oraz zestawienie materiałów.",
     },
 ] as const;

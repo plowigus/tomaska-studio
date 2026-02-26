@@ -2,6 +2,8 @@ import { HeroSection } from "@/app/src/components/sections/HeroSection";
 import { AboutSection } from "@/app/src/components/sections/AboutSection";
 import { SelectedWorks } from "@/app/src/components/sections/SelectedWorks";
 import { OfferSection } from "./src/components/sections/OfferSection";
+import { ContactSection } from "./src/components/sections/ContactSection";
+
 
 export default function Home() {
   return (
@@ -10,6 +12,8 @@ export default function Home() {
       <AboutSection />
       <OfferSection />
       <SelectedWorks />
+      <ContactSection />
+
     </>
   );
 }
