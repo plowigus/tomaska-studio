@@ -67,7 +67,7 @@ export function Navigation() {
                 <Link href="/" className="cursor-pointer text-xl tracking-tight font-sans font-bold text-[#333]">
                     TOMASKA STUDIO
                 </Link>
-                <button onClick={openMenu} className="cursor-pointer group flex flex-col gap-2 items-end p-2">
+                <button onClick={openMenu} aria-label="Otwórz menu" className="cursor-pointer group flex flex-col gap-2 items-end p-2">
                     <div className="w-12 h-[2px] bg-black" />
                     <div className="w-8 h-[2px] bg-black " />
                 </button>
@@ -75,7 +75,7 @@ export function Navigation() {
 
             <div ref={overlayRef} className="fixed inset-0 z-50 bg-white text-black flex flex-col translate-y-full">
                 <div className="absolute top-0 left-0 w-full px-8 md:px-16 lg:px-24 py-12 flex justify-end">
-                    <button onClick={closeMenu} className="cursor-pointer group flex flex-col gap-2 items-end p-2">
+                    <button onClick={closeMenu} aria-label="Zamknij menu" className="cursor-pointer group flex flex-col gap-2 items-end p-2">
                         <div className="w-12 h-[2px] bg-black rotate-45 translate-y-[5px]" />
                         <div className="w-12 h-[2px] bg-black -rotate-45 -translate-y-[5px]" />
                     </button>
