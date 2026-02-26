@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import { Navigation } from "@/app/src/components/sections/Navigation";
 import { LenisProvider } from "@/app/src/components/providers/LenisProvider";
+import { GoogleAnalytics } from "@/app/src/components/providers/GoogleAnalytics";
+import { CookieConsent } from "@/app/src/components/ui/CookieConsent";
 import "./globals.css";
 
 
@@ -85,6 +87,8 @@ export default function RootLayout({
           <Navigation />
           <main className="flex min-h-screen flex-col">{children}</main>
         </LenisProvider>
+        <GoogleAnalytics />
+        <CookieConsent />
       </body>
     </html>
   );
