@@ -4,9 +4,11 @@ import { redirect } from "next/navigation";
 import AdminLayoutClient from "./AdminLayoutClient";
 
 const ALLOWED_EMAILS = [
-    "wnetrza@tomaskastudio.pl",
-    "plowigus@gmail.com"
-];
+    process.env.ADMIN_EMAIL_1,
+    process.env.ADMIN_EMAIL_2
+].filter((email): email is string => Boolean(email));
+
+console.log("Allowed emails:", ALLOWED_EMAILS);
 
 export default async function AdminLayout({
     children,

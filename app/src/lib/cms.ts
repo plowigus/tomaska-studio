@@ -33,6 +33,14 @@ export type OfferStep = {
     description: string;
 };
 
+export type HeroSlide = {
+    id: number;
+    image: string;
+    seo_alt: string;
+    date: string;
+    sort_order: number;
+};
+
 export async function getSiteContent(section?: string) {
     let query = supabase.from("site_content").select("*");
     if (section) {
@@ -177,6 +185,74 @@ export async function upsertOfferStep(step: Partial<OfferStep>) {
 export async function deleteOfferStep(id: number) {
     const { error } = await supabase
         .from("offer_steps")
+        .delete()
+        .eq("id", id);
+    if (error) throw error;
+}
+
+// 5. Hero Slides
+export async function getHeroSlides() {
+    const { data, error } = await supabase
+        .from("hero_slides")
+        .select("*")
+        .order("sort_order", { ascending: true });
+    if (error) throw error;
+    return data as HeroSlide[];
+}
+
+export async function upsertHeroSlide(slide: Partial<HeroSlide>) {
+    if (slide.id) {
+        const { id, ...updateData } = slide;
+        // Clean up metadata before update
+        const cleanData = {
+            image: updateData.image,
+            seo_alt: updateData.seo_alt,
+            date: updateData.date,
+            sort_order: updateData.sort_order,
+            updated_at: new Date().toISOString()
+        };
+
+        const { data, error } = await supabase
+            .from("hero_slides")
+            .update(cleanData)
+            .eq("id", id)
+            .select();
+
+        if (error) throw error;
+        return data?.[0] as HeroSlide;
+    } else {
+        // Strip ID and timestamps for new slide
+        const { id, created_at, updated_at, ...insertData } = slide as any;
+        const { data, error } = await supabase
+            .from("hero_slides")
+            .insert([insertData])
+            .select();
+
+        if (error) throw error;
+        return data?.[0] as HeroSlide;
+    }
+}
+
+export async function updateHeroSlides(slides: HeroSlide[]) {
+    // Clean data for upsert
+    const cleanSlides = slides.map(slide => {
+        const { created_at, updated_at, ...data } = slide as any;
+        return {
+            ...data,
+            updated_at: new Date().toISOString()
+        };
+    });
+
+    const { error } = await supabase
+        .from("hero_slides")
+        .upsert(cleanSlides, { onConflict: "id" });
+
+    if (error) throw error;
+}
+
+export async function deleteHeroSlide(id: number) {
+    const { error } = await supabase
+        .from("hero_slides")
         .delete()
         .eq("id", id);
     if (error) throw error;

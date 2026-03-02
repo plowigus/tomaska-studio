@@ -16,17 +16,25 @@ export default function LoginPage() {
         setIsLoading(true);
         setError("");
 
-        const result = await signIn("credentials", {
-            email,
-            password,
-            redirect: false,
-        });
+        try {
+            const result = await signIn("credentials", {
+                email,
+                password,
+                redirect: false,
+            });
 
-        if (result?.error) {
-            setError("Nieprawidłowy e-mail lub hasło");
+            console.log("Auth Result:", result);
+
+            if (result?.error) {
+                setError("Nieprawidłowy e-mail lub hasło");
+                setIsLoading(false);
+            } else {
+                router.push("/admin");
+            }
+        } catch (err) {
+            console.error("Sign-in error:", err);
+            setError("Wystąpił nieoczekiwany błąd podczas logowania.");
             setIsLoading(false);
-        } else {
-            router.push("/admin");
         }
     };
 

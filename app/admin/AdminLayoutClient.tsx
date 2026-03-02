@@ -9,7 +9,8 @@ import {
     MessageSquare,
     LogOut,
     Type,
-    ListChecks
+    ListChecks,
+    Image as ImageIcon
 } from "lucide-react";
 import { cn } from "@/app/src/lib/utils";
 import { signOut } from "next-auth/react";
@@ -17,6 +18,7 @@ import { Menu, X } from "lucide-react";
 
 const sidebarLinks = [
     { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
+    { name: "Hero", href: "/admin/hero", icon: ImageIcon },
     { name: "Treści", href: "/admin/content", icon: Type },
     { name: "Projekty", href: "/admin/projects", icon: Briefcase },
     { name: "Opinie", href: "/admin/testimonials", icon: MessageSquare },

@@ -103,7 +103,7 @@ export function AboutSection({ content }: AboutSectionProps) {
                 <div ref={imagesGridRef} className="grid grid-cols-2 gap-4 auto-rows-[160px] md:auto-rows-[300px]">
                     <div className="relative w-full h-full overflow-hidden bg-gray-200 aspect-square lg:aspect-auto">
                         <Image
-                            src="/05. Męski Azyl/Detal/DRP_174.jpg"
+                            src={content?.about_image_1 || "/05. Męski Azyl/Detal/DRP_174.jpg"}
                             alt="Architektoniczny detal schodów - Projektowanie Wnętrz Joanna Tomaska"
                             fill
                             sizes="(max-width: 768px) 50vw, 25vw"
@@ -112,7 +112,7 @@ export function AboutSection({ content }: AboutSectionProps) {
                     </div>
                     <div className="relative w-full h-full overflow-hidden bg-gray-200 aspect-square lg:aspect-auto lg:row-span-2">
                         <Image
-                            src="/05. Męski Azyl/Detal/DRP_175.jpg"
+                            src={content?.about_image_2 || "/05. Męski Azyl/Detal/DRP_175.jpg"}
                             alt="Minimalistyczna i funkcjonalna przestrzeń - Ekskluzywne Wnętrza Architekt"
                             fill
                             sizes="(max-width: 768px) 50vw, 25vw"
@@ -121,7 +121,7 @@ export function AboutSection({ content }: AboutSectionProps) {
                     </div>
                     <div className="relative w-full h-full overflow-hidden bg-gray-200 col-span-2 aspect-square min-h-[250px] lg:col-span-1 lg:aspect-auto lg:min-h-0">
                         <Image
-                            src="/05. Męski Azyl/Detal/DRP_176.jpg"
+                            src={content?.about_image_3 || "/05. Męski Azyl/Detal/DRP_176.jpg"}
                             alt="Luksusowe wnętrze dające poczucie komfortu - Aranżacja Wnętrz"
                             fill
                             sizes="(max-width: 768px) 100vw, 25vw"

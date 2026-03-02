@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { Save, Loader2, AlertCircle, CheckCircle } from "lucide-react";
 import { getSiteContent, updateSiteContent } from "@/app/src/lib/cms";
 import { supabase } from "@/app/src/lib/supabase";
+import { UploadButton } from "@/app/src/lib/uploadthing";
+import Image from "next/image";
 
 export default function ContentEditor() {
     const [content, setContent] = useState<Record<string, Record<string, string>>>({});
@@ -98,26 +100,75 @@ export default function ContentEditor() {
                     <section key={section} className="space-y-6">
                         <h2 className="text-xl font-serif font-bold capitalize border-l-4 border-black pl-4">Sekcja: {section}</h2>
                         <div className="grid gap-8">
-                            {Object.entries(keys).map(([key, value]) => (
-                                <div key={key} className="space-y-2">
-                                    <label className="text-xs font-medium uppercase tracking-widest text-black/40">{key}</label>
-                                    {value.length > 100 ? (
-                                        <textarea
-                                            value={value}
-                                            onChange={(e) => handleUpdate(section, key, e.target.value)}
-                                            rows={4}
-                                            className="w-full bg-white border border-black/5 rounded-xl p-4 font-serif text-lg outline-none focus:border-black/20 focus:ring-4 focus:ring-black/5 transition-all resize-none"
-                                        />
-                                    ) : (
-                                        <input
-                                            type="text"
-                                            value={value}
-                                            onChange={(e) => handleUpdate(section, key, e.target.value)}
-                                            className="w-full bg-white border border-black/5 rounded-xl p-4 font-serif text-lg outline-none focus:border-black/20 focus:ring-4 focus:ring-black/5 transition-all font-bold"
-                                        />
-                                    )}
-                                </div>
-                            ))}
+                            {Object.entries(keys)
+                                .sort(([keyA], [keyB]) => {
+                                    const isImageA = keyA.includes("image");
+                                    const isImageB = keyB.includes("image");
+                                    if (isImageA !== isImageB) return isImageA ? 1 : -1;
+                                    return keyA.localeCompare(keyB, undefined, { numeric: true, sensitivity: 'base' });
+                                })
+                                .map(([key, value]) => (
+                                    <div key={key} className="space-y-2">
+                                        <label className="text-xs font-medium uppercase tracking-widest text-black/40">{key}</label>
+                                        {key.includes("image") ? (
+                                            <div className="flex flex-col md:flex-row gap-6 items-start bg-white border border-black/5 rounded-2xl p-6">
+                                                <div className="relative w-40 h-40 bg-alabaster rounded-xl overflow-hidden border border-black/10 shrink-0">
+                                                    {value ? (
+                                                        <Image src={value} alt={key} fill className="object-cover" />
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center text-black/10 italic">Brak zdjęcia</div>
+                                                    )}
+                                                </div>
+                                                <div className="flex-1 space-y-4 w-full">
+                                                    <input
+                                                        type="text"
+                                                        value={value}
+                                                        onChange={(e) => handleUpdate(section, key, e.target.value)}
+                                                        placeholder="URL zdjęcia..."
+                                                        className="w-full bg-alabaster border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-black/5 transition-all font-mono"
+                                                    />
+                                                    <div className="pt-2">
+                                                        <p className="text-[10px] font-bold uppercase tracking-widest text-black/30 mb-2">Wgraj zdjęcie z komputera:</p>
+                                                        <UploadButton
+                                                            endpoint="imageUploader"
+                                                            onClientUploadComplete={(res: any) => {
+                                                                if (res?.[0]) handleUpdate(section, key, res[0].url);
+                                                            }}
+                                                            onUploadError={(error: Error) => {
+                                                                alert(`Błąd: ${error.message}`);
+                                                            }}
+                                                            content={{
+                                                                button({ ready }) {
+                                                                    if (ready) return "Wybierz plik";
+                                                                    return "Ładowanie...";
+                                                                },
+                                                                allowedContent: "Obrazy do 16MB"
+                                                            }}
+                                                            appearance={{
+                                                                button: "bg-black text-white hover:bg-black/80 transition-all rounded-xl px-6 py-4 text-sm font-bold w-full md:w-auto h-auto",
+                                                                allowedContent: "text-[10px] text-black/40 mt-1 uppercase tracking-tighter"
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ) : value.length > 100 ? (
+                                            <textarea
+                                                value={value}
+                                                onChange={(e) => handleUpdate(section, key, e.target.value)}
+                                                rows={4}
+                                                className="w-full bg-white border border-black/5 rounded-xl p-4 font-serif text-lg outline-none focus:border-black/20 focus:ring-4 focus:ring-black/5 transition-all resize-none"
+                                            />
+                                        ) : (
+                                            <input
+                                                type="text"
+                                                value={value}
+                                                onChange={(e) => handleUpdate(section, key, e.target.value)}
+                                                className="w-full bg-white border border-black/5 rounded-xl p-4 font-serif text-lg outline-none focus:border-black/20 focus:ring-4 focus:ring-black/5 transition-all font-bold"
+                                            />
+                                        )}
+                                    </div>
+                                ))}
                         </div>
                     </section>
                 ))}

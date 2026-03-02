@@ -8,12 +8,14 @@ import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import { HERO_PROJECTS } from "@/app/src/config/constants";
 import { CarouselCursor } from "@/app/src/components/ui/CarouselCursor";
+import type { HeroSlide } from "@/app/src/lib/cms";
 
 interface HeroSectionProps {
     content?: Record<string, string>;
+    slides?: HeroSlide[];
 }
 
-export function HeroSection({ content }: HeroSectionProps) {
+export function HeroSection({ content, slides }: HeroSectionProps) {
     const containerRef = useRef<HTMLElement>(null);
     const textContainerRef = useRef<HTMLDivElement>(null);
 
@@ -24,7 +26,8 @@ export function HeroSection({ content }: HeroSectionProps) {
         [AutoScroll({ playOnInit: true, speed: 1, stopOnInteraction: false })]
     );
 
-    const allProjects = [...HERO_PROJECTS, ...HERO_PROJECTS];
+    const displaySlides = slides && slides.length > 0 ? slides : HERO_PROJECTS;
+    const allProjects = [...displaySlides, ...displaySlides];
 
     const quote = content?.quote || "„Tworzę przestrzeń idealną dla klienta, poznając jego osobowość oraz indywidualne potrzeby.\"";
 
@@ -79,13 +82,13 @@ export function HeroSection({ content }: HeroSectionProps) {
             >
                 <div ref={emblaRef} className="overflow-hidden w-full">
                     <div className="flex">
-                        {allProjects.map((project, index) => (
-                            <div key={`${project.seoAlt}-${index}`} className="flex-[0_0_80%] md:flex-[0_0_40%] lg:flex-[0_0_33.333%] min-w-0 pl-1">
+                        {allProjects.map((project: any, index) => (
+                            <div key={`${project.seo_alt || project.seoAlt}-${index}`} className="flex-[0_0_80%] md:flex-[0_0_40%] lg:flex-[0_0_33.333%] min-w-0 pl-1">
                                 <div className="relative group/image">
                                     <div className="relative h-[300px] overflow-hidden bg-gray-200">
                                         <Image
                                             src={project.image}
-                                            alt={project.seoAlt}
+                                            alt={project.seo_alt || project.seoAlt}
                                             fill
                                             sizes="(max-width: 768px) 100vw, 33vw"
                                             className="object-cover pointer-events-none select-none group-hover/image:scale-105 transition-transform duration-700"
