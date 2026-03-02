@@ -155,7 +155,13 @@ export const SELECTED_WORKS = [
 
 
 
-export const OFFER_STEPS = [
+export interface OfferStep {
+    id: string;
+    title: string;
+    description: string;
+}
+
+export const OFFER_STEPS: OfferStep[] = [
     {
         id: "01",
         title: "Przygotowanie do procesu",
@@ -175,5 +181,38 @@ export const OFFER_STEPS = [
         id: "04",
         title: "Dobór Materiałów i Rysunki Techniczne",
         description: "Spotkanie w sklepach branżowych w celu wyboru materiałów wykończeniowych i wyposażenia. Projekt wodno-kanalizacyjny, elektryki, mebli na wymiar, rysunki zaprojektowanych ścian oraz zestawienie materiałów.",
+    },
+] as const;
+
+export const TESTIMONIALS = [
+    {
+        id: 1,
+        name: "Anna i Marek K.",
+        project: "Elegancja marmuru",
+        quote: "Współpraca z Joanną to czysta przyjemność. Od pierwszego spotkania czuliśmy, że rozumie naszą wizję. Efekt przeszedł nasze najśmielsze oczekiwania — każdy detal jest przemyślany, a wnętrze żyje własnym życiem.",
+    },
+    {
+        id: 2,
+        name: "Tomasz W.",
+        project: "Męski azyl",
+        quote: "Szukałem projektantki, która nie boi się odważnych rozwiązań. Joanna zaproponowała beton architektoniczny i matowe detale, o których sam bym nie pomyślał. Mieszkanie wygląda jak z magazynu wnętrzarskiego, a jednocześnie jest niezwykle funkcjonalne.",
+    },
+    {
+        id: 3,
+        name: "Katarzyna i Piotr D.",
+        project: "Nowoczesna klasyka",
+        quote: "Nasz dom pod Krakowem zyskał duszę dzięki Joannie. Połączenie klasycznych sztukaterii z nowoczesnym oświetleniem to strzał w dziesiątkę. Goście zawsze pytają, kto projektował wnętrze!",
+    },
+    {
+        id: 4,
+        name: "Magdalena S.",
+        project: "Spokojna przestrzeń",
+        quote: "Po całym dniu w pracy potrzebuję wyciszenia. Joanna stworzyła przestrzeń, która jest jak azyl — jasna, spokojna, pełna naturalnych materiałów. Każdego dnia cieszę się, wracając do domu.",
+    },
+    {
+        id: 5,
+        name: "Robert i Ewa N.",
+        project: "Przytulne wnętrze",
+        quote: "Joanna potrafiła uchwycić charakter naszej rodziny i przełożyć go na projekt. Wnętrze jest ciepłe, domowe i idealnie dopasowane do naszych potrzeb. Dzieci uwielbiają swoje pokoje!",
     },
 ] as const;

@@ -4,15 +4,16 @@ import { useRef, useState, FormEvent } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Send, Loader2, CheckCircle, AlertCircle, Paperclip, X } from "lucide-react";
+import { Send, Loader2, CheckCircle, AlertCircle, Paperclip } from "lucide-react";
 import { contactSchema, validateFile } from "@/app/src/lib/validations";
-import { z } from "zod";
 
 gsap.registerPlugin(ScrollTrigger);
 
-type FormStatus = "idle" | "sending" | "success" | "error";
+interface ContactSectionProps {
+    content?: Record<string, string>;
+}
 
-export function ContactSection() {
+export function ContactSection({ content }: ContactSectionProps) {
     const containerRef = useRef<HTMLElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
@@ -23,6 +24,12 @@ export function ContactSection() {
     const [errorMessage, setErrorMessage] = useState("");
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
     const [fileName, setFileName] = useState("");
+
+    const designerName = content?.designer_name || "Joanna Tomaska";
+    const phone = content?.phone || "885 469 189";
+    const email = content?.email || "wnetrza@tomaskastudio.pl";
+    const heading = content?.heading || "Zostańmy w kontakcie!";
+    const description = content?.description || "Jesteś zainteresowany projektem wnętrza lub chciałbyś dowiedzieć się jak wygląda współpraca z projektantem? Pisz lub dzwoń śmiało! Odpowiem na wszystkie Twoje pytania.";
 
     useGSAP(() => {
         gsap.from(headerRef.current, {
@@ -133,17 +140,17 @@ export function ContactSection() {
         }
     };
 
-    const inputClasses = "w-full bg-transparent border border-black/50 focus:border-black py-3 px-4 text-[15px] text-black placeholder:text-black/40 outline-none transition-colors duration-300";
-    const labelClasses = "block text-xs tracking-widest uppercase text-black mb-2";
+    const inputClasses = "w-full bg-transparent border border-black/40 focus:border-black py-3 px-4 text-[15px] text-charcoal placeholder:text-black/40 outline-none transition-colors duration-300";
+    const labelClasses = "block text-xs tracking-widest uppercase text-charcoal mb-2 font-bold";
 
     return (
         <section
             ref={containerRef}
             id="kontakt"
-            className="px-8 md:px-16 lg:px-24 pt-16 pb-24 md:pt-24 md:pb-32 min-h-dvh lg:h-dvh flex flex-col justify-center bg-alabaster overflow-hidden"
+            className="px-8 md:px-16 lg:px-24 pt-16 pb-24 md:pt-24 md:pb-32 min-h-dvh lg:h-dvh flex flex-col justify-center bg-alabaster overflow-hidden text-charcoal"
         >
             <div ref={headerRef} className="mb-10 lg:mb-12 border-b border-black/30 pb-6">
-                <h2 className="text-[clamp(2.5rem,5vw,3.5rem)] tracking-tight font-bold uppercase font-serif text-black leading-none">
+                <h2 className="text-[clamp(2.5rem,5vw,3.5rem)] tracking-tight font-bold uppercase font-serif leading-none">
                     Kontakt
                 </h2>
             </div>
@@ -151,29 +158,26 @@ export function ContactSection() {
             <div ref={contentRef} className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 max-w-[1600px] mx-auto">
                 {/* Left: Contact Info */}
                 <div className="flex flex-col justify-start">
-                    <h3 className="text-4xl md:text-5xl font-serif font-bold mb-8">Zostańmy w kontakcie!</h3>
-                    <p className="text-lg md:text-xl leading-relaxed text-black mb-10 font-serif">
-                        Jesteś zainteresowany projektem wnętrza lub chciałbyś dowiedzieć się
-                        jak wygląda współpraca z projektantem?
-                        <br />
-                        Pisz lub dzwoń śmiało! Odpowiem na wszystkie Twoje pytania.
+                    <h3 className="text-4xl md:text-5xl font-serif font-bold mb-8">{heading}</h3>
+                    <p className="text-lg md:text-xl leading-relaxed mb-10 font-serif">
+                        {description}
                     </p>
 
                     <div className="space-y-6">
                         <div>
-                            <span className="text-xs tracking-widest uppercase text-black block mb-1">Projektant</span>
-                            <span className="text-xl tracking-wide font-light">Joanna Tomaska</span>
+                            <span className="text-xs tracking-widest uppercase block mb-1 font-bold">Projektant</span>
+                            <span className="text-xl tracking-wide font-light">{designerName}</span>
                         </div>
                         <div>
-                            <span className="text-xs tracking-widest uppercase text-black block mb-1">Telefon</span>
-                            <a href="tel:+48885469189" className="text-xl tracking-wide font-light hover:text-black/70 transition-colors">
-                                885 469 189
+                            <span className="text-xs tracking-widest uppercase block mb-1 font-bold">Telefon</span>
+                            <a href={`tel:+48${phone.replace(/\s/g, '')}`} className="text-xl tracking-wide font-light hover:text-black/70 transition-colors">
+                                {phone}
                             </a>
                         </div>
                         <div>
-                            <span className="text-xs tracking-widest uppercase text-black block mb-1">E-mail</span>
-                            <a href="mailto:wnetrza@tomaskastudio.pl" className="text-xl tracking-wide font-light hover:text-black/70 transition-colors">
-                                wnetrza@tomaskastudio.pl
+                            <span className="text-xs tracking-widest uppercase block mb-1 font-bold">E-mail</span>
+                            <a href={`mailto:${email}`} className="text-xl tracking-wide font-light hover:text-black/70 transition-colors">
+                                {email}
                             </a>
                         </div>
                     </div>
@@ -268,7 +272,7 @@ export function ContactSection() {
                         <button
                             type="submit"
                             disabled={status === "sending"}
-                            className="cursor-pointer group relative flex items-center gap-3 px-10 py-4 bg-black text-white text-sm tracking-widest uppercase hover:bg-black/85 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="cursor-pointer group relative flex items-center gap-3 px-10 py-4 bg-black text-white text-sm tracking-widest uppercase hover:opacity-85 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {status === "sending" ? (
                                 <>

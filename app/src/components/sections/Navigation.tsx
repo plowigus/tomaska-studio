@@ -5,9 +5,14 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import Link from "next/link";
 import Lenis from "lenis";
+import { usePathname } from "next/navigation";
 
 export function Navigation() {
+    const pathname = usePathname();
     const [menuOpen, setMenuOpen] = useState(false);
+
+    // Don't show navigation on admin or auth pages
+    if (pathname?.startsWith("/admin") || pathname === "/login") return null;
     const containerRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
     const tl = useRef<gsap.core.Timeline | null>(null);
@@ -56,8 +61,9 @@ export function Navigation() {
 
     const menuItems = [
         { label: 'O MNIE', href: '#o-mnie' },
-        { label: 'PROJEKTY', href: '#galeria' },
         { label: 'WSPÓŁPRACA', href: '#oferta' },
+        { label: 'PROJEKTY', href: '#galeria' },
+        { label: 'OPINIE', href: '#opinie' },
         { label: 'KONTAKT', href: '#kontakt' },
     ];
 
@@ -85,7 +91,7 @@ export function Navigation() {
                     <div className="w-full">
                         {menuItems.map((item) => (
                             <div key={item.label} className="menu-item group border-b border-black/20 transition-colors duration-500 hover:border-b-black">
-                                <button onClick={() => handleScrollTo(item.href)} className="cursor-pointer w-full flex items-center justify-end py-6 md:py-8">
+                                <button onClick={() => handleScrollTo(item.href)} className="cursor-pointer w-full flex items-center justify-end py-6 md:py-6">
                                     <span className="text-4xl md:text-5xl lg:text-5xl font-light tracking-tight group-hover:translate-x-4 transition-transform duration-500 font-serif">{item.label}</span>
                                 </button>
                             </div>

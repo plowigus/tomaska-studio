@@ -9,7 +9,11 @@ import AutoScroll from "embla-carousel-auto-scroll";
 import { HERO_PROJECTS } from "@/app/src/config/constants";
 import { CarouselCursor } from "@/app/src/components/ui/CarouselCursor";
 
-export function HeroSection() {
+interface HeroSectionProps {
+    content?: Record<string, string>;
+}
+
+export function HeroSection({ content }: HeroSectionProps) {
     const containerRef = useRef<HTMLElement>(null);
     const textContainerRef = useRef<HTMLDivElement>(null);
 
@@ -21,6 +25,8 @@ export function HeroSection() {
     );
 
     const allProjects = [...HERO_PROJECTS, ...HERO_PROJECTS];
+
+    const quote = content?.quote || "„Tworzę przestrzeń idealną dla klienta, poznając jego osobowość oraz indywidualne potrzeby.\"";
 
     useGSAP(() => {
         gsap.from(textContainerRef.current, {
@@ -48,7 +54,7 @@ export function HeroSection() {
     });
 
     return (
-        <section ref={containerRef} className="relative w-full bg-alabaster h-dvh flex flex-col overflow-hidden pt-32">
+        <section ref={containerRef} className="relative w-full bg-alabaster h-dvh flex flex-col overflow-hidden pt-32 text-charcoal">
             <div className="absolute top-0 left-0 right-0 bg-alabaster z-50" style={{ height: 'env(safe-area-inset-top, 0px)' }} />
             <div className="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 items-center gap-4">
                 <div
@@ -57,11 +63,12 @@ export function HeroSection() {
                 >
                     <h1 className="sr-only">Joanna Tomaska - Architekt Wnętrz, Ekskluzywne Projektowanie Wnętrz</h1>
                     <h2 className="text-3xl lg:text-5xl text-center leading-[1.2] tracking-tight font-serif max-w-6xl lg:max-w-3xl mx-auto text-charcoal">
-                        „Tworzę <em className="italic">przestrzeń</em> idealną dla klienta,{" "}
-                        <br className="hidden lg:block" />
-                        poznając jego <em className="italic">osobowość</em>{" "}
-                        <br className="hidden lg:block" />
-                        oraz indywidualne potrzeby."
+                        {quote.split(',').map((part, i, arr) => (
+                            <span key={i}>
+                                {part}{i < arr.length - 1 ? ',' : ''}
+                                {i < arr.length - 1 && <br className="hidden lg:block" />}
+                            </span>
+                        ))}
                     </h2>
                 </div>
             </div>

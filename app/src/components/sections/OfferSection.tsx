@@ -4,19 +4,24 @@ import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { OFFER_STEPS } from "@/app/src/config/constants";
+import { OFFER_STEPS, type OfferStep } from "@/app/src/config/constants";
 import { Plus } from "lucide-react";
-
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function OfferSection() {
+interface OfferSectionProps {
+    steps?: OfferStep[];
+}
+
+export function OfferSection({ steps }: OfferSectionProps) {
     const containerRef = useRef<HTMLElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const cardsRef = useRef<HTMLDivElement>(null);
 
     const [hoveredStep, setHoveredStep] = useState<string | null>(null);
     const [isMobile, setIsMobile] = useState(false);
+
+    const displaySteps = steps && steps.length > 0 ? steps : OFFER_STEPS;
 
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth < 768);
@@ -75,16 +80,16 @@ export function OfferSection() {
         <section
             ref={containerRef}
             id="oferta"
-            className="px-8 md:px-16 lg:px-24 py-16 md:py-24 bg-alabaster overflow-hidden"
+            className="px-8 md:px-16 lg:px-24 py-16 md:py-24 bg-alabaster overflow-hidden text-charcoal"
         >
             <div ref={headerRef} className="mb-16 md:mb-24 border-b border-black/30 pb-8">
-                <h2 className="text-[clamp(2.5rem,5vw,3.5rem)] tracking-tight font-bold uppercase font-serif text-black leading-none">
+                <h2 className="text-[clamp(2.5rem,5vw,3.5rem)] tracking-tight font-bold uppercase font-serif leading-none">
                     Współpraca
                 </h2>
             </div>
 
             <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-4 lg:gap-6 items-stretch">
-                {OFFER_STEPS.map((step) => {
+                {displaySteps.map((step) => {
                     return (
                         <div
                             key={step.id}
@@ -106,7 +111,9 @@ export function OfferSection() {
 
                             <div className="relative z-20 h-full flex flex-col text-black">
                                 <div className="mb-8 flex items-center gap-3">
-                                    <span className="text-xs font-mono font-bold tracking-widest">{step.id}</span>
+                                    <span className="text-xs font-mono font-bold tracking-widest">
+                                        {(step as any).step_number || step.id}
+                                    </span>
                                     <div className="h-px flex-1 bg-black/30 group-hover:bg-black group-[.active]:bg-black transition-colors" />
                                 </div>
 

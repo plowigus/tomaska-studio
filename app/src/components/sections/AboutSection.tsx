@@ -8,11 +8,21 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function AboutSection() {
+interface AboutSectionProps {
+    content?: Record<string, string>;
+}
+
+export function AboutSection({ content }: AboutSectionProps) {
     const containerRef = useRef<HTMLElement>(null);
     const textContainerRef = useRef<HTMLDivElement>(null);
     const lineRef = useRef<HTMLHRElement>(null);
     const imagesGridRef = useRef<HTMLDivElement>(null);
+
+    const paragraphs = [
+        content?.paragraph_1 || "Jako absolwentka wrocławskiej ASP i założycielka TOMASKA STUDIO, patrzę na architekturę dwutorowo. Fascynują mnie wnętrza budynków, ale kluczem do ich zrozumienia są dla mnie wnętrza ludzi, którzy w nich mieszkają.",
+        content?.paragraph_2 || "Wierzę, że przestrzeń ma realny wpływ na nasze życie. Dlatego każdy projekt zaczynam od poznania Twoich potrzeb, pasji i stylu bycia. Nie narzucam wizji – łączę Twoje oczekiwania z moim doświadczeniem.",
+        content?.paragraph_3 || "Tworzę projekty ponadczasowe. Łączę fakturę, kolor i światło z funkcjonalnością. Efekt? Wnętrze, które jest nie tylko inspirujące i piękne, ale przede wszystkim wygodne. To ma być Twój azyl."
+    ];
 
     useGSAP(() => {
         const textElements = textContainerRef.current?.children;
@@ -68,12 +78,12 @@ export function AboutSection() {
         <section
             ref={containerRef}
             id="o-mnie"
-            className="px-8 md:px-16 lg:px-24 py-12 md:py-24 bg-alabaster overflow-hidden"
+            className="px-8 md:px-16 lg:px-24 py-12 md:py-24 bg-alabaster overflow-hidden text-charcoal"
         >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 max-w-[1600px] mx-auto items-start">
                 <div className="flex flex-col justify-start">
                     <div className="mb-12">
-                        <div ref={textContainerRef}>
+                        <div>
                             <h2 className="text-[clamp(2.5rem,5vw,3.5rem)] tracking-tight font-bold uppercase font-serif leading-none">
                                 O mnie
                             </h2>
@@ -82,15 +92,11 @@ export function AboutSection() {
                     </div>
 
                     <div ref={textContainerRef} className="opacity-100">
-                        <p className="text-base md:text-lg leading-relaxed opacity-70 max-w-xl font-sans mb-6">
-                            Jako absolwentka wrocławskiej ASP i założycielka TOMASKA STUDIO, patrzę na architekturę dwutorowo. Fascynują mnie wnętrza budynków, ale kluczem do ich zrozumienia są dla mnie wnętrza ludzi, którzy w nich mieszkają.
-                        </p>
-                        <p className="text-base md:text-lg leading-relaxed opacity-70 max-w-xl font-sans mb-6">
-                            Wierzę, że przestrzeń ma realny wpływ na nasze życie. Dlatego każdy projekt zaczynam od poznania Twoich potrzeb, pasji i stylu bycia. Nie narzucam wizji – łączę Twoje oczekiwania z moim doświadczeniem.
-                        </p>
-                        <p className="text-base md:text-lg leading-relaxed opacity-70 max-w-xl font-sans">
-                            Tworzę projekty ponadczasowe. Łączę fakturę, kolor i światło z funkcjonalnością. Efekt? Wnętrze, które jest nie tylko inspirujące i piękne, ale przede wszystkim wygodne. To ma być Twój azyl.
-                        </p>
+                        {paragraphs.map((p, i) => (
+                            <p key={i} className="text-base md:text-lg leading-relaxed opacity-70 max-w-xl font-sans mb-6 last:mb-0">
+                                {p}
+                            </p>
+                        ))}
                     </div>
                 </div>
 

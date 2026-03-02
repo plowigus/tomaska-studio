@@ -3,12 +3,24 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import { X, ArrowLeft, ArrowRight } from "lucide-react";
+import { cn } from "@/app/src/lib/utils";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import useEmblaCarousel from "embla-carousel-react";
 import { SELECTED_WORKS } from "@/app/src/config/constants";
 
-type Project = typeof SELECTED_WORKS[number];
+// Use a flexible type that handles both static and CMS-loaded projects
+type Project = {
+    id?: number | string;
+    title: string;
+    category: string;
+    description: string;
+    year: string;
+    image: string;
+    seoAlt?: string;  // Static version
+    seo_alt?: string; // CMS version
+    gallery: (string | { url: string; alt: string })[];
+};
 
 interface ProjectModalProps {
     isOpen: boolean;
@@ -25,8 +37,24 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
     const [activeImage, setActiveImage] = useState(project.image);
     const [isAnimating, setIsAnimating] = useState(false);
     const [mobileActiveSlide, setMobileActiveSlide] = useState(0);
+    const [mainImageLoading, setMainImageLoading] = useState(true);
 
-    const allImages = [project.image, ...project.gallery];
+    // Carousel scroll ref
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    const scrollThumbnails = (direction: "left" | "right") => {
+        if (!scrollRef.current) return;
+        const scrollAmount = 200;
+        scrollRef.current.scrollTo({
+            left: scrollRef.current.scrollLeft + (direction === "right" ? scrollAmount : -scrollAmount),
+            behavior: "smooth"
+        });
+    };
+
+    const allImages = [
+        { url: project.image, alt: project.seoAlt || project.seo_alt || project.title },
+        ...(project.gallery || []).map(img => typeof img === 'string' ? { url: img, alt: project.title } : img)
+    ];
 
     // Mobile carousel (Embla)
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "center" });
@@ -62,15 +90,20 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
             meta.content = color;
         };
 
+        const lenis = (window as any).__lenis;
+
         if (isOpen) {
             document.body.style.overflow = "hidden";
+            lenis?.stop();
             setThemeColor('#0a0a0a');
         } else {
             document.body.style.overflow = "";
+            lenis?.start();
             setThemeColor('#fcfbf9');
         }
         return () => {
             document.body.style.overflow = "";
+            lenis?.start();
             setThemeColor('#fcfbf9');
         };
     }, [isOpen]);
@@ -134,17 +167,18 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
         if (isHovered || isAnimating) return;
 
         const interval = setInterval(() => {
-            const currentIndex = allImages.indexOf(activeImage);
+            const currentIndex = allImages.findIndex(img => img.url === activeImage);
             const nextIndex = (currentIndex + 1) % allImages.length;
-            handleImageChange(allImages[nextIndex]);
-        }, 3500);
+            handleImageChange(allImages[nextIndex].url);
+        }, 5000); // Slower interval for better UX
 
         return () => clearInterval(interval);
-    }, [activeImage, isHovered, isAnimating, project]);
+    }, [activeImage, isHovered, isAnimating, project, allImages]);
 
     const handleImageChange = contextSafe((newImage: string) => {
         if (activeImage === newImage || isAnimating) return;
         setIsAnimating(true);
+        setMainImageLoading(true);
 
         const tl = gsap.timeline({
             onComplete: () => setIsAnimating(false)
@@ -204,8 +238,8 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
                                 {allImages.map((img, index) => (
                                     <div key={index} className="flex-[0_0_100%] min-w-0 relative aspect-4/3">
                                         <Image
-                                            src={img}
-                                            alt={project.seoAlt ? `${project.seoAlt} - zdjęcie ${index + 1}` : `${project.title} - zdjęcie ${index + 1}`}
+                                            src={img.url}
+                                            alt={img.alt}
                                             fill
                                             className="object-contain"
                                             priority={index === 0}
@@ -228,7 +262,7 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
                     </div>
 
                     {/* Scrollable text content */}
-                    <div className="flex-1 overflow-y-auto px-6 pb-4">
+                    <div className="flex-1 overflow-y-auto px-6 pb-4" data-lenis-prevent>
                         <span className="text-xs font-mono text-white/50 tracking-widest uppercase block mb-3">
                             {project.category} — {project.year}
                         </span>
@@ -301,42 +335,60 @@ export function ProjectModal({ isOpen, onClose, project, onNext, onPrev }: Proje
                 >
                     {/* Main Stage */}
                     <div className="relative w-full flex-1 min-h-0 bg-[#0a0a0a] overflow-hidden">
+                        {mainImageLoading && (
+                            <div className="absolute inset-0 flex items-center justify-center z-10">
+                                <div className="w-8 h-8 border-2 border-white/10 border-t-white rounded-full animate-spin" />
+                            </div>
+                        )}
                         <Image
                             src={activeImage}
-                            alt={project.seoAlt || project.title}
+                            alt={allImages.find(img => img.url === activeImage)?.alt || project.title}
                             fill
                             className="active-project-image object-contain"
+                            onLoad={() => setMainImageLoading(false)}
                             priority
                         />
                     </div>
 
                     {/* Thumbnails */}
-                    <div className="p-6 bg-[#0a0a0a] border-t border-white/5">
-                        <div className="grid grid-cols-8 gap-2">
+                    <div className="p-6 bg-[#0a0a0a] border-t border-white/5 relative group/thumbs">
+                        {/* Desktop Arrows */}
+                        <div className="absolute inset-y-0 left-2 z-10 hidden md:flex items-center opacity-0 group-hover/thumbs:opacity-100 transition-opacity">
                             <button
-                                onClick={() => handleImageChange(project.image)}
-                                className={`relative aspect-square overflow-hidden rounded-sm transition-all duration-300 ${activeImage === project.image ? 'ring-2 ring-white opacity-100' : 'opacity-40 hover:opacity-100'
-                                    }`}
+                                onClick={() => scrollThumbnails("left")}
+                                className="p-2 bg-black/50 hover:bg-black rounded-full text-white/50 hover:text-white border border-white/10 transition-all cursor-pointer"
                             >
-                                <Image
-                                    src={project.image}
-                                    alt={project.seoAlt ? `${project.seoAlt} - miniatura głowna` : `${project.title} - miniatura główna`}
-                                    fill
-                                    className="object-cover"
-                                />
+                                <ArrowLeft size={16} />
                             </button>
-                            {project.gallery.map((img, index) => (
+                        </div>
+                        <div className="absolute inset-y-0 right-2 z-10 hidden md:flex items-center opacity-0 group-hover/thumbs:opacity-100 transition-opacity">
+                            <button
+                                onClick={() => scrollThumbnails("right")}
+                                className="p-2 bg-black/50 hover:bg-black rounded-full text-white/50 hover:text-white border border-white/10 transition-all cursor-pointer"
+                            >
+                                <ArrowRight size={16} />
+                            </button>
+                        </div>
+
+                        <div
+                            ref={scrollRef}
+                            className="flex gap-2 overflow-x-auto scrollbar-hide select-none transition-all px-4"
+                        >
+                            {allImages.map((img, index) => (
                                 <button
                                     key={index}
-                                    onClick={() => handleImageChange(img)}
-                                    className={`relative aspect-square overflow-hidden rounded-sm transition-all duration-300 ${activeImage === img ? 'ring-2 ring-white opacity-100' : 'opacity-40 hover:opacity-100'
-                                        }`}
+                                    onClick={() => handleImageChange(img.url)}
+                                    className={cn(
+                                        "relative shrink-0 w-[calc((100%-7*8px)/8)] aspect-square overflow-hidden rounded-sm transition-all duration-300 cursor-pointer",
+                                        activeImage === img.url ? 'ring-2 ring-white opacity-100' : 'opacity-40 hover:opacity-100'
+                                    )}
+                                    style={{ minWidth: '80px' }}
                                 >
                                     <Image
-                                        src={img}
-                                        alt={project.seoAlt ? `${project.seoAlt} - miniatura ${index + 1}` : `${project.title} - miniatura ${index + 1}`}
+                                        src={img.url}
+                                        alt={img.alt}
                                         fill
-                                        className="object-cover"
+                                        className="object-cover pointer-events-none"
                                     />
                                 </button>
                             ))}

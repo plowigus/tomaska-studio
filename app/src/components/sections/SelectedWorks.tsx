@@ -8,28 +8,36 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SELECTED_WORKS } from "@/app/src/config/constants";
 import { ProjectModal } from "@/app/src/components/ui/ProjectModal";
+import type { Project } from "@/app/src/lib/cms";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function SelectedWorks() {
+interface SelectedWorksProps {
+    projects?: Project[];
+}
+
+export function SelectedWorks({ projects }: SelectedWorksProps) {
     const containerRef = useRef<HTMLElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const lineRef = useRef<HTMLHRElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
-    const [selectedProject, setSelectedProject] = useState<typeof SELECTED_WORKS[number] | null>(null);
+
+    const displayProjects = projects && projects.length > 0 ? projects : SELECTED_WORKS;
+
+    const [selectedProject, setSelectedProject] = useState<any | null>(null);
 
     const handleNextProject = () => {
         if (!selectedProject) return;
-        const currentIndex = SELECTED_WORKS.findIndex(p => p.id === selectedProject.id);
-        const nextIndex = (currentIndex + 1) % SELECTED_WORKS.length;
-        setSelectedProject(SELECTED_WORKS[nextIndex]);
+        const currentIndex = displayProjects.findIndex(p => p.id === selectedProject.id);
+        const nextIndex = (currentIndex + 1) % displayProjects.length;
+        setSelectedProject(displayProjects[nextIndex]);
     };
 
     const handlePrevProject = () => {
         if (!selectedProject) return;
-        const currentIndex = SELECTED_WORKS.findIndex(p => p.id === selectedProject.id);
-        const prevIndex = (currentIndex - 1 + SELECTED_WORKS.length) % SELECTED_WORKS.length;
-        setSelectedProject(SELECTED_WORKS[prevIndex]);
+        const currentIndex = displayProjects.findIndex(p => p.id === selectedProject.id);
+        const prevIndex = (currentIndex - 1 + displayProjects.length) % displayProjects.length;
+        setSelectedProject(displayProjects[prevIndex]);
     };
 
     useGSAP(() => {
@@ -72,7 +80,7 @@ export function SelectedWorks() {
         <section
             ref={containerRef}
             id="works"
-            className="px-8 md:px-16 lg:px-24 py-12 md:py-24 bg-alabaster overflow-hidden"
+            className="px-8 md:px-16 lg:px-24 py-12 md:py-24 bg-alabaster overflow-hidden text-charcoal"
         >
             <div className="mb-24">
                 <div ref={headerRef} className="opacity-100">
@@ -91,7 +99,7 @@ export function SelectedWorks() {
                 ref={gridRef}
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-12 max-w-[1600px] mx-auto"
             >
-                {SELECTED_WORKS.map((project) => (
+                {displayProjects.map((project) => (
                     <div
                         key={project.id}
                         onClick={() => setSelectedProject(project)}
@@ -111,7 +119,7 @@ export function SelectedWorks() {
                         <div className="relative aspect-3/4 overflow-hidden bg-[#e5e5e5] border border-black/20">
                             <Image
                                 src={project.image}
-                                alt={project.seoAlt || project.title}
+                                alt={project.title}
                                 fill
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                                 className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
