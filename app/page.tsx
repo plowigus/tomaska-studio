@@ -6,6 +6,8 @@ import { TestimonialsSection } from "./src/components/sections/TestimonialsSecti
 import { ContactSection } from "./src/components/sections/ContactSection";
 import { getSiteContent, getProjects, getTestimonials, getOfferSteps, getHeroSlides } from "@/app/src/lib/cms";
 
+export const dynamic = "force-dynamic";
+
 type CMSContent = Record<string, Record<string, string>>;
 
 export default async function Home() {
