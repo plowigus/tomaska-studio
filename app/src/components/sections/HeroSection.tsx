@@ -93,6 +93,7 @@ export function HeroSection({ content, slides }: HeroSectionProps) {
                                             sizes="(max-width: 768px) 100vw, 33vw"
                                             className="object-cover pointer-events-none select-none group-hover/image:scale-105 transition-transform duration-700"
                                             priority={index < 3}
+                                            fetchPriority="high"
                                         />
                                     </div>
                                 </div>
