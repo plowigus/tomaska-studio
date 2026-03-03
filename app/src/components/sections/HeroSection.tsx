@@ -45,9 +45,8 @@ export function HeroSection({ content, slides }: HeroSectionProps) {
         if (sliderContainer) {
             gsap.from(sliderContainer, {
                 y: 40,
-                opacity: 0,
                 duration: 1,
-                delay: 0.8,
+                delay: 0.2,
                 ease: "power2.out"
             });
         }
