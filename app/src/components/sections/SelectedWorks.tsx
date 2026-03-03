@@ -7,7 +7,8 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SELECTED_WORKS } from "@/app/src/config/constants";
-import { ProjectModal } from "@/app/src/components/ui/ProjectModal";
+import dynamic from "next/dynamic";
+const ProjectModal = dynamic(() => import("@/app/src/components/ui/ProjectModal").then(m => m.ProjectModal), { ssr: false });
 import type { Project } from "@/app/src/lib/cms";
 
 gsap.registerPlugin(ScrollTrigger);
