@@ -77,7 +77,7 @@ export function HeroSection({ content, slides }: HeroSectionProps) {
             <CarouselCursor container={sliderContainer} />
             <div
                 ref={setSliderContainer}
-                className="relative w-screen overflow-hidden cursor-none"
+                className="relative w-screen overflow-hidden md:cursor-none"
             >
                 <div ref={emblaRef} className="overflow-hidden w-full">
                     <div className="flex">
